@@ -215,29 +215,40 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--text
 
 /* DESKTOP */
 @media(min-width:768px){
-  #appScreen{flex-direction:row;flex-wrap:wrap}
-  .topbar{width:100%;position:sticky;top:0;z-index:100}
-  .body{display:flex;flex-direction:row;height:calc(100vh - 52px);overflow:hidden;padding:0}
-  .left-col{width:200px;border-right:1px solid var(--border);display:flex;flex-direction:column;overflow:hidden;flex-shrink:0;background:var(--surface)}
-  .mid-col{width:220px;border-right:1px solid var(--border);display:flex;flex-direction:column;overflow:hidden;flex-shrink:0;background:var(--bg)}
-  .right-col{flex:1;display:flex;flex-direction:column;overflow:hidden;min-width:0}
-  .ai-col{width:230px;border-left:1px solid var(--border);display:flex;flex-direction:column;overflow:hidden;flex-shrink:0;background:var(--surface)}
-  .cat-scroll{flex-direction:column;overflow-y:auto;overflow-x:hidden;height:100%;padding:8px;gap:2px;border-bottom:none}
-  .cat-chip{border-radius:var(--radius);text-align:left;padding:7px 10px}
-  .recipe-list-mobile{max-height:none;flex:1;overflow-y:auto}
-  .recipe-col-header{position:sticky;top:0;z-index:1}
-  .section-tabs{display:none}
-  .sec-content{display:block!important;padding:0}
-  .body-scroll-desktop{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:16px}
-  .ai-msgs{max-height:none;flex:1}
-  .ai-panel{display:flex;flex-direction:column;flex:1;border-top:none}
+  html,body{height:100%;overflow:hidden}
+  #appScreen{display:flex!important;flex-direction:column;height:100vh;overflow:hidden}
+  .body{display:flex!important;flex-direction:row;flex:1;height:calc(100vh - 52px);overflow:hidden;padding:0}
+  .left-col{width:190px;border-right:1px solid var(--border);display:flex!important;flex-direction:column;overflow:hidden;flex-shrink:0;background:var(--surface);height:100%}
+  .mid-col{width:220px;border-right:1px solid var(--border);display:flex!important;flex-direction:column;overflow:hidden;flex-shrink:0;background:var(--bg);height:100%}
+  .right-col{flex:1;display:flex!important;flex-direction:column;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;min-width:0;padding-bottom:0;height:100%}
+  .ai-col{width:220px;border-left:1px solid var(--border);display:flex!important;flex-direction:column;overflow:hidden;flex-shrink:0;background:var(--surface);height:100%}
+  /* 모바일 전용 요소 숨기기 */
+  #catScrollMobile{display:none!important}
+  .recipe-list-mobile#recipeListMobile{display:none!important}
+  .recipe-col-header:not(.mid-col .recipe-col-header){display:none!important}
+  .section-tabs{display:none!important}
+  /* 데스크탑에서 섹션 탭 없이 모두 표시 */
+  .sec-content{display:block!important;padding:14px 16px}
+  #sec-ai{padding:0!important}
+  /* 카테고리 세로 배치 */
+  .cat-scroll{flex-direction:column;overflow-y:auto;overflow-x:hidden;flex:1;padding:6px;gap:2px;border-bottom:none;border-right:none}
+  .cat-chip{border-radius:var(--radius);text-align:left;padding:7px 10px;width:100%}
+  /* 레시피 목록 */
+  .recipe-list-mobile{max-height:none!important;flex:1;overflow-y:auto}
+  .recipe-col-header{position:sticky;top:0;z-index:1;background:var(--surface)}
+  /* AI 패널 */
+  .ai-msgs{max-height:none;flex:1;overflow-y:auto}
+  .ai-panel{display:flex;flex-direction:column;flex:1;border-top:none;overflow:hidden}
+  /* save bar & toolbar */
+  .save-bar{flex-shrink:0}
+  .detail-toolbar{flex-shrink:0}
   #toast{bottom:20px}
   .overlay{align-items:center;padding:20px}
   .modal{border-radius:16px;max-width:400px;padding-bottom:16px}
 }
 @media(max-width:767px){
-  .left-col,.mid-col,.ai-col{display:none}
-  .right-col{display:block;overflow:hidden}
+  .left-col,.mid-col,.ai-col{display:none!important}
+  .right-col{display:block;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;padding-bottom:calc(70px + var(--safe-bottom))}
 }
 </style>
 </head>
@@ -778,9 +789,9 @@ function aiSend(msg,msgsEl,inputEl){
   if(!msg)return;inputEl.value='';
   var r=activeId&&recipes[activeId];var ctx=r?'현재 레시피: '+r.name+', 재료: '+(r.ingredients||[]).join(', ')+'.':'레시피 미선택.';
   addAiMsg(msg,'user',msgsEl);showTyping(msgsEl);
-  fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-6',max_tokens:800,messages:[{role:'user',content:'당신은 레시피 어시스턴트입니다. '+ctx+' 질문: '+msg+'. 한국어로 간결하게 답하세요.'}]})})
+  fetch('/.netlify/functions/ai',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({message:msg,context:ctx})})
     .then(function(res){return res.json();})
-    .then(function(data){removeTyping(msgsEl);addAiMsg((data.content&&data.content[0]&&data.content[0].text)||'답변을 가져오지 못했어요.','ai',msgsEl);})
+    .then(function(data){removeTyping(msgsEl);addAiMsg(data.text||'답변을 가져오지 못했어요.','ai',msgsEl);})
     .catch(function(){removeTyping(msgsEl);addAiMsg('네트워크 오류가 발생했어요.','ai',msgsEl);});
 }
 function addAiMsg(text,role,el){var d=document.createElement('div');d.className=role==='user'?'ai-user':'ai-bot';d.innerHTML='<div class="ai-msg-role">'+(role==='user'?(myNick||'나'):'AI 어시스턴트')+'</div><div class="ai-bubble">'+text.replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>').replace(/\n/g,'<br>')+'</div>';el.appendChild(d);el.scrollTop=el.scrollHeight;}
