@@ -2,12 +2,14 @@
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
 <title>레시피 북 — 레시피</title>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css">
 <style>
-*{box-sizing:border-box;margin:0;padding:0}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 :root{
   --bg:#f8f8f7;--surface:#fff;--s2:#f4f4f3;--s3:#ececeb;
   --border:#e5e5e3;--border2:#d1d1ce;
@@ -16,315 +18,406 @@
   --ok:#16a34a;--okbg:#f0fdf4;--okt:#15803d;
   --warn:#d97706;--warnbg:#fffbeb;--warnt:#b45309;
   --red:#dc2626;--redbg:#fef2f2;--redt:#b91c1c;
-  --radius:8px;
+  --radius:10px;
+  --safe-bottom:env(safe-area-inset-bottom,0px);
+  --safe-top:env(safe-area-inset-top,0px);
 }
-body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--text);height:100vh;overflow:hidden;font-size:14px}
+html,body{height:100%;overflow-x:hidden;width:100%;max-width:100vw}
+body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--text);font-size:14px}
 
 /* NICK */
-#nickScreen{display:flex;align-items:center;justify-content:center;height:100vh;background:linear-gradient(135deg,#1e293b,#334155)}
-.nick-card{background:#fff;border-radius:20px;padding:38px 34px;width:360px;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,.3)}
-.nick-logo{font-size:46px;margin-bottom:14px}
-.nick-title{font-size:21px;font-weight:700;margin-bottom:6px}
-.nick-sub{font-size:13px;color:var(--t2);margin-bottom:24px;line-height:1.5}
-.nick-input{width:100%;padding:12px 16px;border:1.5px solid var(--border);border-radius:var(--radius);font-size:15px;font-family:inherit;outline:none;text-align:center;margin-bottom:12px;transition:border-color .15s}
+#nickScreen{display:flex;align-items:center;justify-content:center;min-height:100vh;background:linear-gradient(135deg,#1e293b,#334155);padding:20px;padding-top:calc(20px + var(--safe-top));padding-bottom:calc(20px + var(--safe-bottom))}
+.nick-card{background:#fff;border-radius:20px;padding:36px 24px;width:100%;max-width:360px;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,.3)}
+.nick-logo{font-size:44px;margin-bottom:12px}
+.nick-title{font-size:20px;font-weight:700;margin-bottom:6px}
+.nick-sub{font-size:13px;color:var(--t2);margin-bottom:22px;line-height:1.5}
+.nick-input{width:100%;padding:13px 14px;border:1.5px solid var(--border);border-radius:var(--radius);font-size:16px;font-family:inherit;outline:none;text-align:center;margin-bottom:12px;-webkit-appearance:none;appearance:none}
 .nick-input:focus{border-color:var(--accent)}
-.nick-btn{width:100%;padding:12px;border:none;border-radius:var(--radius);background:var(--accent);color:#fff;font-size:15px;font-weight:600;cursor:pointer;font-family:inherit}
-.nick-btn:hover{opacity:.9}
+.nick-btn{width:100%;padding:13px;border:none;border-radius:var(--radius);background:var(--accent);color:#fff;font-size:15px;font-weight:600;cursor:pointer;font-family:inherit;-webkit-appearance:none}
+.nick-btn:active{opacity:.85}
 .nick-home{display:block;margin-top:12px;font-size:12px;color:var(--t3);text-decoration:none}
-.nick-home:hover{color:var(--accent)}
 
-/* LAYOUT */
-#appScreen{display:none;height:100vh;flex-direction:column}
-.topbar{height:50px;background:var(--surface);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 14px;gap:10px;flex-shrink:0}
-.logo{font-size:15px;font-weight:700;display:flex;align-items:center;gap:7px;cursor:pointer;text-decoration:none;color:var(--text)}
+/* APP */
+#appScreen{display:none;flex-direction:column;height:100vh;height:-webkit-fill-available;width:100%;overflow:hidden}
+
+/* TOPBAR */
+.topbar{height:52px;background:var(--surface);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 12px;padding-top:var(--safe-top);gap:8px;flex-shrink:0;width:100%;overflow:hidden}
+.logo{font-size:15px;font-weight:700;display:flex;align-items:center;gap:6px;cursor:pointer;text-decoration:none;color:var(--text);flex-shrink:0}
 .logo i{color:var(--accent);font-size:18px}
-.home-link{display:flex;align-items:center;gap:5px;padding:5px 10px;border:1px solid var(--border);border-radius:var(--radius);font-size:12px;color:var(--t2);text-decoration:none;transition:all .15s}
-.home-link:hover{background:var(--s2);color:var(--text)}
-.topbar-right{margin-left:auto;display:flex;align-items:center;gap:8px}
-.online-pill{display:flex;align-items:center;gap:5px;padding:4px 10px;background:var(--okbg);border-radius:99px;font-size:11px;color:var(--okt);font-weight:500}
-.pulse{width:6px;height:6px;border-radius:50%;background:var(--ok);animation:pulse 2s infinite}
+.home-link{display:flex;align-items:center;gap:4px;padding:7px 10px;border:1px solid var(--border);border-radius:var(--radius);font-size:12px;color:var(--t2);text-decoration:none;flex-shrink:0;white-space:nowrap}
+.topbar-right{margin-left:auto;display:flex;align-items:center;gap:6px;flex-shrink:0}
+.online-pill{display:flex;align-items:center;gap:4px;padding:4px 8px;background:var(--okbg);border-radius:99px;font-size:11px;color:var(--okt);font-weight:500;white-space:nowrap}
+.pulse{width:6px;height:6px;border-radius:50%;background:var(--ok);animation:pulse 2s infinite;flex-shrink:0}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
-.av{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;border:2px solid var(--surface);flex-shrink:0}
-.nick-label{font-size:12px;color:var(--t2)}
-.body{display:flex;flex:1;overflow:hidden}
+.av{width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:600;flex-shrink:0}
 
-/* SIDEBAR */
-.sidebar{width:210px;background:var(--surface);border-right:1px solid var(--border);display:flex;flex-direction:column;flex-shrink:0}
-.sb-search{padding:10px 10px 6px}
-.sb-sw{position:relative}
-.sb-sw input{width:100%;padding:7px 10px 7px 28px;border:1px solid var(--border);border-radius:var(--radius);font-size:12px;font-family:inherit;outline:none;background:var(--bg)}
-.sb-sw input:focus{border-color:var(--accent)}
-.sb-sw i{position:absolute;left:8px;top:50%;transform:translateY(-50%);font-size:13px;color:var(--t3)}
-.sb-sec{padding:8px 10px 2px}
-.sb-label{font-size:10px;font-weight:600;color:var(--t3);letter-spacing:.08em;text-transform:uppercase;padding:3px 6px;display:flex;align-items:center;justify-content:space-between}
-.sb-label button{width:20px;height:20px;border:none;background:none;cursor:pointer;border-radius:4px;color:var(--t3);display:flex;align-items:center;justify-content:center}
-.sb-label button:hover{background:var(--s2);color:var(--accent)}
-.sb-item{display:flex;align-items:center;gap:7px;padding:6px 8px;border-radius:var(--radius);cursor:pointer;font-size:12px;color:var(--t2);margin-bottom:1px;transition:background .1s;position:relative}
-.sb-item:hover{background:var(--s2)}
-.sb-item.active{background:var(--abg);color:var(--at);font-weight:500}
-.sb-item i{font-size:15px;width:16px;flex-shrink:0}
-.sb-badge{margin-left:auto;font-size:10px;padding:1px 6px;border-radius:99px;background:var(--s2);border:1px solid var(--border);color:var(--t3)}
-.sb-item.active .sb-badge{background:rgba(37,99,235,.1);border-color:transparent;color:var(--at)}
-.edit-cat-btn{position:absolute;right:6px;opacity:0;width:20px;height:20px;border:none;background:var(--s2);border-radius:4px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--t2)}
-.sb-item:hover .edit-cat-btn{opacity:1}
-.sb-item:hover .sb-badge,.sb-item.active .sb-badge,.sb-item.active .edit-cat-btn{display:none}
-.sb-bottom{padding:10px;border-top:1px solid var(--border);margin-top:auto}
-.share-btn-main{width:100%;padding:8px;border:1.5px dashed var(--accent);border-radius:var(--radius);background:var(--abg);color:var(--at);font-size:12px;font-weight:500;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;font-family:inherit}
-.share-btn-main:hover{border-style:solid}
+/* MOBILE LAYOUT — 세로 스크롤 단일 컬럼 */
+.body{flex:1;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;padding:0;padding-bottom:calc(70px + var(--safe-bottom))}
 
-/* RECIPE LIST */
-.recipe-col{width:235px;border-right:1px solid var(--border);overflow-y:auto;flex-shrink:0;background:var(--bg)}
-.col-header{padding:10px 12px;background:var(--surface);border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px;position:sticky;top:0;z-index:1}
-.col-title{font-size:13px;font-weight:600;flex:1}
-.btn{padding:5px 10px;border:1px solid var(--border);border-radius:var(--radius);background:var(--surface);font-size:12px;color:var(--t2);cursor:pointer;display:inline-flex;align-items:center;gap:5px;font-family:inherit;transition:all .15s;white-space:nowrap}
-.btn:hover{background:var(--s2);border-color:var(--border2)}
-.btn.primary{background:var(--accent);color:#fff;border-color:var(--accent)}
-.btn.primary:hover{opacity:.88}
-.btn.danger{color:var(--redt);border-color:#fca5a5}
-.btn.danger:hover{background:var(--redbg)}
-.r-card{padding:11px 12px;border-bottom:1px solid var(--border);cursor:pointer;background:var(--surface);transition:background .1s}
-.r-card:hover{background:#fafaf9}
-.r-card.active{background:var(--abg);border-left:3px solid var(--accent)}
-.r-thumb{width:100%;height:76px;border-radius:8px;background:var(--s2);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:26px;color:var(--t3);margin-bottom:7px;overflow:hidden}
-.r-thumb img{width:100%;height:100%;object-fit:cover}
-.r-name{font-size:13px;font-weight:600;margin-bottom:3px}
-.r-meta{font-size:10px;color:var(--t3);display:flex;align-items:center;gap:5px}
-.r-cat-badge{font-size:9px;padding:2px 6px;border-radius:99px;background:var(--abg);color:var(--at);font-weight:500;margin-left:auto}
-.r-edited{font-size:10px;color:var(--t3);display:flex;align-items:center;gap:4px;margin-top:4px}
-.mini-av{width:14px;height:14px;border-radius:50%;font-size:7px;font-weight:600;display:flex;align-items:center;justify-content:center}
-.empty{padding:40px 20px;text-align:center;color:var(--t3)}
-.empty i{font-size:36px;display:block;margin-bottom:8px}
-.empty p{font-size:12px}
-
-/* DETAIL */
-.detail{flex:1;display:flex;flex-direction:column;overflow:hidden;min-width:0}
-
-/* SAVE STATUS BAR */
-.save-bar{padding:8px 14px;display:flex;align-items:center;gap:10px;font-size:12px;border-bottom:1px solid var(--border);background:var(--surface);flex-shrink:0;min-height:40px}
-.save-status{display:flex;align-items:center;gap:6px;font-size:12px}
-.save-status.idle{color:var(--t3)}
-.save-status.saving{color:var(--warn)}
-.save-status.saved{color:var(--okt)}
-.save-status.error{color:var(--redt)}
-.save-spinner{width:12px;height:12px;border:2px solid var(--border);border-top-color:var(--warn);border-radius:50%;animation:spin .6s linear infinite;display:none}
+/* SAVE BAR */
+.save-bar{padding:8px 12px;background:var(--surface);border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px;font-size:12px;flex-shrink:0}
+.save-status{display:flex;align-items:center;gap:5px;flex:1;min-width:0;overflow:hidden}
+.save-status span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.save-status.idle span{color:var(--t3)}
+.save-status.saving span{color:var(--warn)}
+.save-status.saved span{color:var(--okt)}
+.save-status.error span{color:var(--redt)}
+.save-spinner{width:11px;height:11px;border:2px solid var(--border);border-top-color:var(--warn);border-radius:50%;animation:spin .6s linear infinite;display:none;flex-shrink:0}
 @keyframes spin{to{transform:rotate(360deg)}}
 
-.detail-toolbar{padding:9px 14px;background:var(--surface);border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px;flex-wrap:wrap;flex-shrink:0}
-.editing-ind{font-size:11px;padding:3px 9px;border-radius:99px;background:var(--warnbg);color:var(--warnt);border:1px solid #fcd34d;display:flex;align-items:center;gap:5px}
-.detail-scroll{flex:1;overflow-y:auto;padding:18px}
-.detail-title-input{font-size:22px;font-weight:600;border:none;outline:none;background:transparent;width:100%;font-family:inherit;color:var(--text);padding:0;margin-bottom:4px}
-.detail-meta-input{font-size:12px;color:var(--t2);border:none;outline:none;background:transparent;width:100%;font-family:inherit;padding:0}
-.sec-head{font-size:10px;font-weight:600;color:var(--t3);text-transform:uppercase;letter-spacing:.07em;margin:14px 0 8px;display:flex;align-items:center;gap:5px}
-.ing-grid{display:grid;grid-template-columns:1fr 1fr;gap:5px;margin-bottom:8px}
-.ing-chip{display:flex;align-items:center;gap:5px;padding:6px 8px;background:var(--s2);border:1px solid var(--border);border-radius:var(--radius);font-size:12px}
-.ing-chip input{border:none;outline:none;background:transparent;font-size:12px;width:100%;font-family:inherit;color:var(--text)}
-.ing-chip button{border:none;background:none;cursor:pointer;color:var(--t3);padding:0;font-size:12px;display:flex;align-items:center}
-.ing-chip button:hover{color:var(--red)}
-.step-item{display:flex;gap:8px;margin-bottom:8px;align-items:flex-start}
-.step-n{width:20px;height:20px;border-radius:50%;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:600;flex-shrink:0;margin-top:3px}
-.step-input{flex:1;border:none;border-bottom:1px solid var(--border);outline:none;background:transparent;font-size:13px;font-family:inherit;color:var(--text);padding:2px 0;line-height:1.5}
+/* TOOLBAR */
+.detail-toolbar{padding:8px 12px;background:var(--surface);border-bottom:1px solid var(--border);display:flex;align-items:center;gap:6px;overflow-x:auto;-webkit-overflow-scrolling:touch;flex-shrink:0;-ms-overflow-style:none;scrollbar-width:none}
+.detail-toolbar::-webkit-scrollbar{display:none}
+.editing-ind{font-size:11px;padding:3px 8px;border-radius:99px;background:var(--warnbg);color:var(--warnt);border:1px solid #fcd34d;display:flex;align-items:center;gap:4px;white-space:nowrap;flex-shrink:0}
+
+/* SECTION TABS (mobile nav for recipe sections) */
+.section-tabs{display:flex;gap:0;border-bottom:1px solid var(--border);background:var(--surface);overflow-x:auto;-webkit-overflow-scrolling:touch;flex-shrink:0;-ms-overflow-style:none;scrollbar-width:none}
+.section-tabs::-webkit-scrollbar{display:none}
+.sec-tab{padding:10px 14px;font-size:12px;color:var(--t2);cursor:pointer;white-space:nowrap;border-bottom:2px solid transparent;flex-shrink:0;background:none;border-top:none;border-left:none;border-right:none;font-family:inherit}
+.sec-tab.active{color:var(--accent);border-bottom-color:var(--accent);font-weight:500}
+
+/* CONTENT SECTIONS */
+.sec-content{display:none;padding:14px 14px;animation:fadeIn .15s ease}
+.sec-content.active{display:block}
+@keyframes fadeIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
+
+/* INPUTS */
+.detail-title-input{width:100%;font-size:20px;font-weight:600;border:none;outline:none;background:transparent;font-family:inherit;color:var(--text);padding:0;margin-bottom:6px;-webkit-appearance:none}
+.detail-meta-input{width:100%;font-size:13px;color:var(--t2);border:none;outline:none;background:transparent;font-family:inherit;padding:0;-webkit-appearance:none}
+.sec-head{font-size:11px;font-weight:600;color:var(--t3);text-transform:uppercase;letter-spacing:.07em;margin:0 0 10px;display:flex;align-items:center;gap:5px}
+
+/* INGREDIENTS */
+.ing-list{display:flex;flex-direction:column;gap:6px;margin-bottom:10px}
+.ing-chip{display:flex;align-items:center;gap:8px;padding:10px 12px;background:var(--s2);border:1px solid var(--border);border-radius:var(--radius)}
+.ing-chip input{border:none;outline:none;background:transparent;font-size:14px;width:100%;font-family:inherit;color:var(--text);min-width:0;-webkit-appearance:none}
+.ing-chip button{border:none;background:none;cursor:pointer;color:var(--t3);padding:4px;display:flex;align-items:center;flex-shrink:0}
+.ing-chip button:active{color:var(--red)}
+
+/* STEPS */
+.step-item{display:flex;gap:10px;margin-bottom:10px;align-items:flex-start}
+.step-n{width:24px;height:24px;border-radius:50%;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;flex-shrink:0;margin-top:6px}
+.step-input{flex:1;min-width:0;border:none;border-bottom:1px solid var(--border);outline:none;background:transparent;font-size:14px;font-family:inherit;color:var(--text);padding:6px 0;line-height:1.5;-webkit-appearance:none}
 .step-input:focus{border-bottom-color:var(--accent)}
-.divider{border:none;border-top:1px solid var(--border);margin:14px 0}
-.note-area{width:100%;border:1px solid var(--border);border-radius:var(--radius);padding:9px 11px;font-size:12px;font-family:inherit;resize:none;height:72px;background:var(--s2);color:var(--text);outline:none;line-height:1.6}
+
+/* NOTE */
+.note-area{width:100%;border:1px solid var(--border);border-radius:var(--radius);padding:10px 12px;font-size:14px;font-family:inherit;resize:none;height:100px;background:var(--s2);color:var(--text);outline:none;line-height:1.6;-webkit-appearance:none}
 .note-area:focus{border-color:var(--accent);background:var(--surface)}
-.photo-row{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:10px}
-.photo-thumb{width:72px;height:72px;border-radius:8px;border:1px solid var(--border);overflow:hidden;cursor:pointer;background:var(--s2);display:flex;align-items:center;justify-content:center;font-size:22px;color:var(--t3);position:relative;flex-shrink:0}
+
+/* PHOTOS */
+.photo-scroll{display:flex;gap:8px;overflow-x:auto;-webkit-overflow-scrolling:touch;padding:2px 0 8px;-ms-overflow-style:none;scrollbar-width:none;margin-bottom:4px}
+.photo-scroll::-webkit-scrollbar{display:none}
+.photo-thumb{width:80px;height:80px;border-radius:10px;border:1px solid var(--border);overflow:hidden;cursor:pointer;background:var(--s2);display:flex;align-items:center;justify-content:center;font-size:24px;color:var(--t3);flex-shrink:0;position:relative}
 .photo-thumb img{width:100%;height:100%;object-fit:cover}
-.photo-thumb:hover::after{content:'✕';position:absolute;inset:0;background:rgba(0,0,0,.5);color:#fff;display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:600}
-.photo-add{width:72px;height:72px;border-radius:8px;border:1.5px dashed var(--border2);background:var(--s2);display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--t3);font-size:24px;transition:all .15s;flex-shrink:0}
-.photo-add:hover{border-color:var(--accent);color:var(--accent);background:var(--abg)}
+.photo-add{width:80px;height:80px;border-radius:10px;border:1.5px dashed var(--border2);background:var(--s2);display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--t3);font-size:28px;flex-shrink:0}
+.photo-add:active{border-color:var(--accent);color:var(--accent);background:var(--abg)}
 
 /* ACTIVITY */
-.act-panel{padding:12px 14px;border-top:1px solid var(--border);background:var(--surface);flex-shrink:0}
-.act-items{display:flex;flex-direction:column;gap:5px;max-height:84px;overflow-y:auto}
-.act-item{display:flex;align-items:center;gap:7px;font-size:11px;color:var(--t2)}
-.act-time{margin-left:auto;color:var(--t3);font-size:10px;white-space:nowrap}
+.act-items{display:flex;flex-direction:column;gap:6px}
+.act-item{display:flex;align-items:center;gap:7px;font-size:12px;padding:6px 0;border-bottom:1px solid var(--border)}
+.act-item:last-child{border-bottom:none}
+.act-time{margin-left:auto;color:var(--t3);font-size:10px;white-space:nowrap;flex-shrink:0}
 
-/* AI */
-.ai-panel{width:240px;border-left:1px solid var(--border);display:flex;flex-direction:column;background:var(--surface);flex-shrink:0}
-.ai-header{padding:10px 12px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+/* AI PANEL */
+.ai-panel{background:var(--surface);border-top:1px solid var(--border)}
+.ai-header{padding:10px 14px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:7px}
 .ai-title{font-size:12px;font-weight:600;display:flex;align-items:center;gap:6px}
-.ai-dot{width:6px;height:6px;border-radius:50%;background:var(--ok)}
-.ai-msgs{flex:1;overflow-y:auto;padding:10px;display:flex;flex-direction:column;gap:8px}
-.ai-msg{}
-.ai-role{font-size:10px;color:var(--t3);margin-bottom:2px;font-weight:500}
-.ai-bubble{font-size:12px;line-height:1.55;padding:7px 9px;border-radius:8px}
-.ai-msg.user .ai-bubble{background:var(--abg);color:var(--at)}
-.ai-msg.ai .ai-bubble{background:var(--s2);border:1px solid var(--border);color:var(--text)}
-.ai-footer{padding:9px;border-top:1px solid var(--border)}
-.ai-quick{display:flex;flex-wrap:wrap;gap:4px;margin-bottom:7px}
-.ai-qbtn{font-size:11px;padding:3px 8px;border:1px solid var(--border);border-radius:99px;background:var(--s2);color:var(--t2);cursor:pointer}
-.ai-qbtn:hover{border-color:var(--accent);color:var(--at)}
-.ai-row{display:flex;gap:5px}
-.ai-input{flex:1;resize:none;border:1px solid var(--border);border-radius:var(--radius);padding:6px 8px;font-size:12px;background:var(--s2);color:var(--text);font-family:inherit;outline:none;height:32px}
+.ai-dot{width:6px;height:6px;border-radius:50%;background:var(--ok);flex-shrink:0}
+.ai-msgs{max-height:180px;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:10px 14px;display:flex;flex-direction:column;gap:8px}
+.ai-msg-role{font-size:10px;color:var(--t3);margin-bottom:2px;font-weight:500}
+.ai-bubble{font-size:12px;line-height:1.55;padding:8px 10px;border-radius:8px}
+.ai-user .ai-bubble{background:var(--abg);color:var(--at)}
+.ai-bot .ai-bubble{background:var(--s2);border:1px solid var(--border);color:var(--text)}
+.ai-footer{padding:10px 14px;border-top:1px solid var(--border)}
+.ai-quick{display:flex;gap:6px;overflow-x:auto;-webkit-overflow-scrolling:touch;margin-bottom:8px;-ms-overflow-style:none;scrollbar-width:none}
+.ai-quick::-webkit-scrollbar{display:none}
+.ai-qbtn{font-size:11px;padding:6px 10px;border:1px solid var(--border);border-radius:99px;background:var(--s2);color:var(--t2);cursor:pointer;white-space:nowrap;flex-shrink:0;-webkit-appearance:none}
+.ai-qbtn:active{border-color:var(--accent);color:var(--at)}
+.ai-row{display:flex;gap:8px}
+.ai-input{flex:1;min-width:0;resize:none;border:1px solid var(--border);border-radius:var(--radius);padding:8px 10px;font-size:16px;background:var(--s2);color:var(--text);font-family:inherit;outline:none;height:36px;-webkit-appearance:none}
 .ai-input:focus{border-color:var(--accent);background:var(--surface)}
-.ai-send{padding:6px 9px;background:var(--accent);color:#fff;border:none;border-radius:var(--radius);cursor:pointer;font-size:13px;display:flex;align-items:center}
-.ai-send:hover{opacity:.88}
+.ai-send{padding:8px 12px;background:var(--accent);color:#fff;border:none;border-radius:var(--radius);cursor:pointer;font-size:14px;display:flex;align-items:center;flex-shrink:0;-webkit-appearance:none}
 .typing span{display:inline-block;width:4px;height:4px;background:var(--t3);border-radius:50%;margin:0 1px;animation:blink 1.2s infinite}
 .typing span:nth-child(2){animation-delay:.2s}
 .typing span:nth-child(3){animation-delay:.4s}
 @keyframes blink{0%,80%,100%{opacity:.3}40%{opacity:1}}
 
-/* MODALS */
-.overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.4);align-items:center;justify-content:center;z-index:1000;padding:16px}
-.overlay.open{display:flex}
-.modal{background:var(--surface);border-radius:14px;padding:20px;width:100%;max-width:380px;border:1px solid var(--border)}
-.modal-title{font-size:15px;font-weight:600;margin-bottom:3px;display:flex;align-items:center;gap:8px}
-.modal-sub{font-size:12px;color:var(--t2);margin-bottom:16px}
-.modal label{font-size:11px;font-weight:500;color:var(--t2);display:block;margin-bottom:4px;margin-top:12px}
-.modal label:first-of-type{margin-top:0}
-.modal input,.modal select{width:100%;padding:8px 11px;border:1px solid var(--border);border-radius:var(--radius);font-size:13px;font-family:inherit;outline:none;background:var(--bg);color:var(--text);transition:border .15s}
-.modal input:focus,.modal select:focus{border-color:var(--accent);background:var(--surface)}
-.modal-actions{display:flex;gap:7px;justify-content:flex-end;margin-top:16px}
-.icon-picker{display:flex;flex-wrap:wrap;gap:5px;margin-top:5px}
-.icon-opt{width:34px;height:34px;border:1px solid var(--border);border-radius:var(--radius);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:16px;color:var(--t2);transition:all .15s}
-.icon-opt:hover{border-color:var(--accent);color:var(--accent)}
-.icon-opt.sel{border-color:var(--accent);background:var(--abg);color:var(--at)}
-.upload-zone{border:2px dashed var(--border);border-radius:var(--radius);padding:22px;text-align:center;cursor:pointer;transition:all .15s}
-.upload-zone:hover,.upload-zone.drag{border-color:var(--accent);background:var(--abg)}
-.upload-zone i{font-size:28px;color:var(--t3);display:block;margin-bottom:6px}
-.upload-zone p{font-size:12px;color:var(--t2)}
-.upload-zone strong{color:var(--at)}
-.prog-bar{height:4px;background:var(--s3);border-radius:99px;margin-top:8px;overflow:hidden}
-.prog-fill{height:100%;background:var(--accent);border-radius:99px;transition:width .2s}
-.no-select{flex:1;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:10px;color:var(--t3)}
-.no-select i{font-size:40px}
+/* SIDEBAR (recipe list) — 모바일에서는 상단 드롭다운/목록 */
+.recipe-col-header{padding:10px 12px;background:var(--surface);border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px;flex-shrink:0}
+.col-title{font-size:13px;font-weight:600;flex:1}
+.recipe-list-mobile{max-height:220px;overflow-y:auto;-webkit-overflow-scrolling:touch;background:var(--surface);border-bottom:1px solid var(--border)}
+.r-card{padding:10px 12px;border-bottom:1px solid var(--border);cursor:pointer;display:flex;align-items:center;gap:10px;transition:background .1s}
+.r-card:active{background:var(--s2)}
+.r-card.active{background:var(--abg);border-left:3px solid var(--accent)}
+.r-thumb-sm{width:44px;height:44px;border-radius:8px;background:var(--s2);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:18px;color:var(--t3);flex-shrink:0;overflow:hidden}
+.r-thumb-sm img{width:100%;height:100%;object-fit:cover}
+.r-info{flex:1;min-width:0}
+.r-name{font-size:13px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.r-meta-sm{font-size:11px;color:var(--t3);margin-top:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.r-cat-badge{font-size:9px;padding:2px 6px;border-radius:99px;background:var(--abg);color:var(--at);font-weight:500;white-space:nowrap;flex-shrink:0}
+.empty{padding:24px;text-align:center;color:var(--t3);font-size:12px}
+
+/* CATEGORY FILTER */
+.cat-scroll{display:flex;gap:6px;overflow-x:auto;-webkit-overflow-scrolling:touch;padding:8px 12px;background:var(--surface);border-bottom:1px solid var(--border);-ms-overflow-style:none;scrollbar-width:none;flex-shrink:0}
+.cat-scroll::-webkit-scrollbar{display:none}
+.cat-chip{padding:5px 12px;border:1px solid var(--border);border-radius:99px;font-size:12px;color:var(--t2);cursor:pointer;white-space:nowrap;flex-shrink:0;background:var(--surface);font-family:inherit;-webkit-appearance:none}
+.cat-chip.active{background:var(--accent);color:#fff;border-color:var(--accent)}
+.cat-chip:active{opacity:.8}
+
+/* NO SELECT */
+.no-select{display:flex;align-items:center;justify-content:center;flex-direction:column;gap:10px;color:var(--t3);padding:40px 20px;text-align:center}
+.no-select i{font-size:36px}
 .no-select p{font-size:13px}
 
+/* DIVIDER */
+.divider{border:none;border-top:1px solid var(--border);margin:12px 0}
+
+/* BUTTONS */
+.btn{padding:9px 14px;border:1px solid var(--border);border-radius:var(--radius);background:var(--surface);font-size:13px;color:var(--t2);cursor:pointer;display:inline-flex;align-items:center;gap:5px;font-family:inherit;white-space:nowrap;-webkit-appearance:none}
+.btn:active{opacity:.8}
+.btn.primary{background:var(--accent);color:#fff;border-color:var(--accent)}
+.btn.danger{color:var(--redt);border-color:#fca5a5}
+.btn.sm{padding:7px 10px;font-size:12px}
+
+/* MODALS */
+.overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);align-items:flex-end;justify-content:center;z-index:1000}
+.overlay.open{display:flex}
+.modal{background:var(--surface);border-radius:20px 20px 0 0;padding:16px 16px;padding-bottom:calc(16px + var(--safe-bottom));width:100%;max-height:92vh;overflow-y:auto;-webkit-overflow-scrolling:touch}
+.modal-handle{width:40px;height:4px;background:var(--border2);border-radius:99px;margin:0 auto 14px}
+.modal-title{font-size:15px;font-weight:700;margin-bottom:3px;display:flex;align-items:center;gap:8px}
+.modal-sub{font-size:12px;color:var(--t2);margin-bottom:14px}
+.modal label{font-size:11px;font-weight:500;color:var(--t2);display:block;margin-bottom:4px;margin-top:12px}
+.modal label:first-of-type{margin-top:0}
+.modal input,.modal select{width:100%;padding:12px;border:1px solid var(--border);border-radius:var(--radius);font-size:16px;font-family:inherit;outline:none;background:var(--bg);color:var(--text);-webkit-appearance:none;appearance:none}
+.modal input:focus{border-color:var(--accent)}
+.modal-actions{display:flex;gap:8px;justify-content:flex-end;margin-top:14px}
+.icon-picker{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+.icon-opt{width:38px;height:38px;border:1px solid var(--border);border-radius:var(--radius);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:18px;color:var(--t2)}
+.icon-opt:active{border-color:var(--accent);color:var(--accent);background:var(--abg)}
+.icon-opt.sel{border-color:var(--accent);background:var(--abg);color:var(--at)}
+.upload-zone{border:2px dashed var(--border);border-radius:var(--radius);padding:24px;text-align:center;cursor:pointer}
+.upload-zone:active{border-color:var(--accent);background:var(--abg)}
+.upload-zone i{font-size:28px;color:var(--t3);display:block;margin-bottom:6px}
+.upload-zone p{font-size:12px;color:var(--t2)}
+.prog-bar{height:4px;background:var(--s3);border-radius:99px;margin-top:8px;overflow:hidden}
+.prog-fill{height:100%;background:var(--accent);border-radius:99px;transition:width .2s}
+
+/* SHARE */
+.share-input-row{display:flex;gap:8px;margin-bottom:10px}
+.share-input-row input{flex:1;min-width:0}
+.member-row{display:flex;align-items:center;gap:8px;padding:10px;background:var(--s2);border-radius:var(--radius);border:1px solid var(--border);margin-bottom:6px}
+.member-info{flex:1;min-width:0}
+.member-name{font-size:13px;font-weight:500;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.role-badge{font-size:10px;padding:3px 9px;border-radius:99px;font-weight:500;white-space:nowrap;flex-shrink:0}
+
 /* TOAST */
-#toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#18181b;color:#fff;padding:10px 20px;border-radius:99px;font-size:13px;display:none;align-items:center;gap:8px;z-index:9999;white-space:nowrap;box-shadow:0 4px 20px rgba(0,0,0,.25)}
+#toast{position:fixed;bottom:calc(16px + var(--safe-bottom));left:50%;transform:translateX(-50%);background:#18181b;color:#fff;padding:10px 20px;border-radius:99px;font-size:13px;display:none;align-items:center;gap:8px;z-index:9999;white-space:nowrap;box-shadow:0 4px 20px rgba(0,0,0,.3)}
 #toast.show{display:flex}
+
+/* DESKTOP */
+@media(min-width:768px){
+  #appScreen{flex-direction:row;flex-wrap:wrap}
+  .topbar{width:100%;position:sticky;top:0;z-index:100}
+  .body{display:flex;flex-direction:row;height:calc(100vh - 52px);overflow:hidden;padding:0}
+  .left-col{width:200px;border-right:1px solid var(--border);display:flex;flex-direction:column;overflow:hidden;flex-shrink:0;background:var(--surface)}
+  .mid-col{width:220px;border-right:1px solid var(--border);display:flex;flex-direction:column;overflow:hidden;flex-shrink:0;background:var(--bg)}
+  .right-col{flex:1;display:flex;flex-direction:column;overflow:hidden;min-width:0}
+  .ai-col{width:230px;border-left:1px solid var(--border);display:flex;flex-direction:column;overflow:hidden;flex-shrink:0;background:var(--surface)}
+  .cat-scroll{flex-direction:column;overflow-y:auto;overflow-x:hidden;height:100%;padding:8px;gap:2px;border-bottom:none}
+  .cat-chip{border-radius:var(--radius);text-align:left;padding:7px 10px}
+  .recipe-list-mobile{max-height:none;flex:1;overflow-y:auto}
+  .recipe-col-header{position:sticky;top:0;z-index:1}
+  .section-tabs{display:none}
+  .sec-content{display:block!important;padding:0}
+  .body-scroll-desktop{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:16px}
+  .ai-msgs{max-height:none;flex:1}
+  .ai-panel{display:flex;flex-direction:column;flex:1;border-top:none}
+  #toast{bottom:20px}
+  .overlay{align-items:center;padding:20px}
+  .modal{border-radius:16px;max-width:400px;padding-bottom:16px}
+}
+@media(max-width:767px){
+  .left-col,.mid-col,.ai-col{display:none}
+  .right-col{display:block;overflow:hidden}
+}
 </style>
 </head>
 <body>
 
-<!-- NICK -->
 <div id="nickScreen">
   <div class="nick-card">
     <div class="nick-logo">🍳</div>
     <div class="nick-title">레시피 북</div>
     <div class="nick-sub">닉네임을 입력하고 입장하세요</div>
-    <input class="nick-input" id="nickInput" type="text" placeholder="닉네임 입력..." maxlength="12" autofocus>
+    <input class="nick-input" id="nickInput" type="text" placeholder="닉네임 입력..." maxlength="12">
     <button class="nick-btn" onclick="enterApp()">입장하기</button>
     <a class="nick-home" href="index.html">← 메인 홈으로</a>
   </div>
 </div>
 
-<!-- APP -->
-<div id="appScreen" style="display:none;flex-direction:column;height:100vh">
+<div id="appScreen">
+  <!-- TOPBAR -->
   <div class="topbar">
     <a class="logo" href="index.html"><i class="ti ti-chef-hat"></i>레시피 북</a>
-    <a class="home-link" href="index.html"><i class="ti ti-home" style="font-size:14px"></i>홈으로</a>
+    <a class="home-link" href="index.html"><i class="ti ti-home" style="font-size:14px"></i>홈</a>
     <div class="topbar-right">
       <div class="online-pill"><div class="pulse"></div><span id="onlineCount">0명</span></div>
       <div class="av" id="myAv" style="background:#dbeafe;color:#1d4ed8">나</div>
-      <span class="nick-label" id="myNickLabel">사용자</span>
     </div>
   </div>
-  <div class="body">
-    <!-- SIDEBAR -->
-    <div class="sidebar">
-      <div class="sb-search">
-        <div class="sb-sw"><i class="ti ti-search"></i><input type="text" placeholder="레시피 검색..." oninput="filterRecipes(this.value)"></div>
-      </div>
-      <div class="sb-sec">
-        <div class="sb-label">카테고리<button onclick="openAddCat()"><i class="ti ti-plus" style="font-size:12px"></i></button></div>
-        <div id="catList"></div>
-      </div>
-      <div class="sb-sec">
-        <div class="sb-label">보관함</div>
-        <div class="sb-item" onclick="openShareModal()"><i class="ti ti-users"></i>공유 & 멤버</div>
-        <div class="sb-item" onclick="openPdfModal()"><i class="ti ti-file-type-pdf"></i>PDF 내보내기</div>
-        <div class="sb-item" onclick="toggleFavFilter()"><i class="ti ti-star"></i>즐겨찾기<span class="sb-badge" id="favBadge">0</span></div>
-      </div>
-      <div class="sb-bottom">
-        <button class="share-btn-main" onclick="openShareModal()"><i class="ti ti-share" style="font-size:14px"></i>공유 & 협업 관리</button>
-      </div>
+
+  <!-- BODY -->
+  <div class="body" id="bodyWrap">
+
+    <!-- LEFT: CATEGORIES (desktop only) -->
+    <div class="left-col">
+      <div style="padding:10px 10px 4px;font-size:10px;font-weight:600;color:var(--t3);letter-spacing:.07em;text-transform:uppercase;display:flex;align-items:center;justify-content:space-between">카테고리<button onclick="openAddCat()" style="border:none;background:none;cursor:pointer;color:var(--t3);display:flex;align-items:center;font-size:13px"><i class="ti ti-plus"></i></button></div>
+      <div class="cat-scroll" id="catListDesktop"></div>
     </div>
 
-    <!-- RECIPE LIST -->
-    <div class="recipe-col">
-      <div class="col-header">
-        <span class="col-title" id="colTitle">전체</span>
-        <button class="btn primary" onclick="openAddRecipe()"><i class="ti ti-plus"></i>추가</button>
+    <!-- MID: RECIPE LIST (desktop only) -->
+    <div class="mid-col">
+      <div class="recipe-col-header">
+        <span class="col-title" id="colTitleDesktop">전체</span>
+        <button class="btn primary sm" onclick="openAddRecipe()"><i class="ti ti-plus"></i>추가</button>
       </div>
-      <div id="recipeList"></div>
+      <div class="recipe-list-mobile" id="recipeListDesktop"></div>
     </div>
 
-    <!-- DETAIL -->
-    <div class="detail">
-      <div class="no-select" id="noSelect"><i class="ti ti-book"></i><p>레시피를 선택하세요</p></div>
-      <div id="detailContent" style="display:none;flex-direction:column;height:100%">
-        <!-- SAVE STATUS BAR -->
+    <!-- RIGHT: DETAIL -->
+    <div class="right-col">
+
+      <!-- MOBILE: category filter -->
+      <div class="cat-scroll" id="catScrollMobile" style="display:flex"></div>
+
+      <!-- MOBILE: recipe list -->
+      <div class="recipe-col-header" style="display:flex">
+        <span class="col-title" id="colTitleMobile">전체</span>
+        <button class="btn primary sm" onclick="openAddRecipe()"><i class="ti ti-plus"></i>추가</button>
+        <button class="btn sm" onclick="openShareModal()" style="margin-left:4px"><i class="ti ti-share"></i></button>
+      </div>
+      <div class="recipe-list-mobile" id="recipeListMobile" style="max-height:180px"></div>
+
+      <!-- DETAIL AREA -->
+      <div id="noSelect" class="no-select"><i class="ti ti-book"></i><p>위에서 레시피를 선택하세요</p></div>
+
+      <div id="detailWrap" style="display:none">
+        <!-- save bar -->
         <div class="save-bar">
           <div class="save-status idle" id="saveStatus">
             <div class="save-spinner" id="saveSpinner"></div>
-            <span id="saveStatusText">변경사항이 있으면 저장 버튼을 누르세요</span>
+            <span id="saveStatusText">저장 버튼을 눌러 저장하세요</span>
           </div>
-          <span id="lastSavedInfo" style="margin-left:auto;font-size:11px;color:var(--t3)"></span>
+          <span id="lastSavedInfo" style="font-size:10px;color:var(--t3);flex-shrink:0"></span>
         </div>
+        <!-- toolbar -->
         <div class="detail-toolbar">
-          <span class="editing-ind" id="editInd" style="display:none"><i class="ti ti-pencil" style="font-size:11px"></i><span id="editWho"></span> 수정 중</span>
-          <div style="flex:1"></div>
-          <button class="btn" onclick="toggleFav()" id="favBtn"><i class="ti ti-star"></i>즐겨찾기</button>
-          <button class="btn" onclick="openPhotoModal()"><i class="ti ti-photo"></i>사진</button>
-          <button class="btn" onclick="openPdfModal()"><i class="ti ti-file-export"></i>PDF</button>
-          <button class="btn primary" onclick="saveDetail()" id="saveBtn"><i class="ti ti-device-floppy"></i>저장</button>
-          <button class="btn danger" onclick="deleteRecipe()" style="padding:5px 8px"><i class="ti ti-trash"></i></button>
+          <span class="editing-ind" id="editInd" style="display:none"><i class="ti ti-pencil" style="font-size:11px"></i><span id="editWho"></span></span>
+          <button class="btn sm" onclick="toggleFav()" id="favBtn"><i class="ti ti-star"></i>즐겨찾기</button>
+          <button class="btn sm" onclick="openPhotoModal()"><i class="ti ti-photo"></i>사진</button>
+          <button class="btn sm" onclick="openPdfModal()"><i class="ti ti-file-export"></i>PDF</button>
+          <button class="btn primary sm" onclick="saveDetail()" id="saveBtn"><i class="ti ti-device-floppy"></i>저장</button>
+          <button class="btn danger sm" onclick="deleteRecipe()" style="padding:7px 8px"><i class="ti ti-trash"></i></button>
         </div>
-        <div class="detail-scroll" id="detailScroll">
+
+        <!-- SECTION TABS (mobile) -->
+        <div class="section-tabs">
+          <button class="sec-tab active" onclick="showSec('info',this)">기본정보</button>
+          <button class="sec-tab" onclick="showSec('ingredients',this)">재료</button>
+          <button class="sec-tab" onclick="showSec('steps',this)">조리순서</button>
+          <button class="sec-tab" onclick="showSec('note',this)">메모</button>
+          <button class="sec-tab" onclick="showSec('activity',this)">활동</button>
+          <button class="sec-tab" onclick="showSec('ai',this)">AI</button>
+        </div>
+
+        <!-- 기본정보 -->
+        <div class="sec-content active" id="sec-info">
           <input class="detail-title-input" id="dTitle" placeholder="레시피 이름">
           <input class="detail-meta-input" id="dMeta" placeholder="예: 30분 · 2인분">
+          <div class="divider"></div>
           <div class="sec-head"><i class="ti ti-photo"></i>사진</div>
-          <div class="photo-row" id="photoRow">
+          <div class="photo-scroll" id="photoRow">
             <div class="photo-add" onclick="openPhotoModal()"><i class="ti ti-plus"></i></div>
           </div>
-          <div class="divider"></div>
+        </div>
+
+        <!-- 재료 -->
+        <div class="sec-content" id="sec-ingredients">
           <div class="sec-head"><i class="ti ti-carrot"></i>재료</div>
-          <div class="ing-grid" id="dIngGrid"></div>
-          <button class="btn" onclick="addIng()" style="margin-bottom:6px;font-size:12px"><i class="ti ti-plus"></i>재료 추가</button>
-          <div class="divider"></div>
+          <div class="ing-list" id="dIngList"></div>
+          <button class="btn sm" onclick="addIng()" style="width:100%;justify-content:center"><i class="ti ti-plus"></i>재료 추가</button>
+        </div>
+
+        <!-- 조리순서 -->
+        <div class="sec-content" id="sec-steps">
           <div class="sec-head"><i class="ti ti-list-numbers"></i>조리 순서</div>
           <div id="dSteps"></div>
-          <button class="btn" onclick="addStep()" style="margin-bottom:6px;font-size:12px"><i class="ti ti-plus"></i>단계 추가</button>
-          <div class="divider"></div>
-          <div class="sec-head"><i class="ti ti-note"></i>공유 메모</div>
-          <textarea class="note-area" id="dNote" placeholder="팁, 변형 방법, 주의사항..."></textarea>
+          <button class="btn sm" onclick="addStep()" style="width:100%;justify-content:center"><i class="ti ti-plus"></i>단계 추가</button>
         </div>
-        <div class="act-panel">
-          <div class="sec-head" style="margin:0 0 7px"><i class="ti ti-activity"></i>실시간 활동</div>
-          <div class="act-items" id="actFeed"></div>
+
+        <!-- 메모 -->
+        <div class="sec-content" id="sec-note">
+          <div class="sec-head"><i class="ti ti-note"></i>공유 메모</div>
+          <textarea class="note-area" id="dNote" placeholder="팁, 변형 방법, 주의사항..." style="height:160px"></textarea>
+        </div>
+
+        <!-- 활동 -->
+        <div class="sec-content" id="sec-activity">
+          <div class="sec-head"><i class="ti ti-activity"></i>실시간 활동</div>
+          <div class="act-items" id="actFeed"><div style="text-align:center;color:var(--t3);font-size:12px;padding:20px">아직 활동이 없습니다.</div></div>
+        </div>
+
+        <!-- AI -->
+        <div class="sec-content" id="sec-ai" style="padding:0">
+          <div class="ai-panel">
+            <div class="ai-header"><div class="ai-title"><div class="ai-dot"></div>AI 레시피 도우미</div></div>
+            <div class="ai-msgs" id="aiMsgs">
+              <div class="ai-bot"><div class="ai-msg-role">AI 어시스턴트</div><div class="ai-bubble">안녕하세요! 재료 대체, 칼로리, 조리법 변형 등 무엇이든 물어보세요 🍳</div></div>
+            </div>
+            <div class="ai-footer">
+              <div class="ai-quick">
+                <button class="ai-qbtn" onclick="quickAsk('칼로리 알려줘')">칼로리</button>
+                <button class="ai-qbtn" onclick="quickAsk('재료 대체 알려줘')">재료 대체</button>
+                <button class="ai-qbtn" onclick="quickAsk('2배 분량으로 바꿔줘')">2배 분량</button>
+                <button class="ai-qbtn" onclick="quickAsk('비건 버전 알려줘')">비건</button>
+              </div>
+              <div class="ai-row">
+                <textarea class="ai-input" id="aiInput" placeholder="질문하세요..." rows="1" onkeydown="handleAiKey(event)"></textarea>
+                <button class="ai-send" onclick="sendAi()"><i class="ti ti-send"></i></button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div><!-- /detailWrap -->
+
+    </div><!-- /right-col -->
+
+    <!-- AI COL (desktop only) -->
+    <div class="ai-col">
+      <div class="ai-header"><div class="ai-title"><div class="ai-dot"></div>AI 노트</div></div>
+      <div class="ai-msgs" id="aiMsgsDesktop">
+        <div class="ai-bot"><div class="ai-msg-role">AI 어시스턴트</div><div class="ai-bubble">안녕하세요! 재료 대체, 칼로리, 조리법 변형 등 물어보세요 🍳</div></div>
+      </div>
+      <div class="ai-footer">
+        <div class="ai-quick">
+          <button class="ai-qbtn" onclick="quickAskD('칼로리 알려줘')">칼로리</button>
+          <button class="ai-qbtn" onclick="quickAskD('재료 대체')">재료 대체</button>
+          <button class="ai-qbtn" onclick="quickAskD('2배 분량')">2배</button>
+        </div>
+        <div class="ai-row">
+          <textarea class="ai-input" id="aiInputDesktop" placeholder="질문..." rows="1" onkeydown="handleAiKeyD(event)"></textarea>
+          <button class="ai-send" onclick="sendAiD()"><i class="ti ti-send"></i></button>
         </div>
       </div>
     </div>
 
-    <!-- AI -->
-    <div class="ai-panel">
-      <div class="ai-header"><div class="ai-title"><div class="ai-dot"></div>AI 노트</div></div>
-      <div class="ai-msgs" id="aiMsgs">
-        <div class="ai-msg ai"><div class="ai-role">AI 어시스턴트</div><div class="ai-bubble">안녕하세요! 레시피 도우미입니다. 재료 대체, 칼로리, 조리법 등 무엇이든 물어보세요 🍳</div></div>
-      </div>
-      <div class="ai-footer">
-        <div class="ai-quick">
-          <button class="ai-qbtn" onclick="quickAsk('칼로리 알려줘')">칼로리</button>
-          <button class="ai-qbtn" onclick="quickAsk('재료 대체 알려줘')">재료 대체</button>
-          <button class="ai-qbtn" onclick="quickAsk('2배 분량으로 바꿔줘')">2배 분량</button>
-          <button class="ai-qbtn" onclick="quickAsk('비건 버전 알려줘')">비건</button>
-        </div>
-        <div class="ai-row">
-          <textarea class="ai-input" id="aiInput" placeholder="질문하세요..." onkeydown="handleAiKey(event)" rows="1"></textarea>
-          <button class="ai-send" onclick="sendAi()"><i class="ti ti-send"></i></button>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
+  </div><!-- /body -->
+</div><!-- /appScreen -->
 
 <!-- MODALS -->
 <div class="overlay" id="catModal">
   <div class="modal">
+    <div class="modal-handle"></div>
     <div class="modal-title"><i class="ti ti-tag"></i><span id="catModalTitle">카테고리 추가</span></div>
-    <div class="modal-sub">이름과 아이콘을 설정하세요.</div>
     <label>이름</label><input type="text" id="catNameInput" placeholder="예: 한식, 건강식...">
     <label>아이콘</label><div class="icon-picker" id="iconPicker"></div>
     <div class="modal-actions">
@@ -337,8 +430,8 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--text
 
 <div class="overlay" id="addRecipeModal">
   <div class="modal">
+    <div class="modal-handle"></div>
     <div class="modal-title"><i class="ti ti-plus"></i>새 레시피</div>
-    <div class="modal-sub">기본 정보를 입력하세요.</div>
     <label>레시피 이름</label><input type="text" id="newRName" placeholder="예: 된장찌개...">
     <label>카테고리</label><select id="newRCat"></select>
     <label>시간 & 분량</label><input type="text" id="newRMeta" placeholder="예: 30분 · 2인분">
@@ -350,25 +443,27 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--text
 </div>
 
 <div class="overlay" id="shareModal">
-  <div class="modal" style="max-width:400px">
+  <div class="modal">
+    <div class="modal-handle"></div>
     <div class="modal-title"><i class="ti ti-users"></i>공유 & 협업</div>
-    <div class="modal-sub">이 링크를 공유하면 누구나 바로 접속할 수 있습니다.</div>
+    <div class="modal-sub">링크를 공유하면 누구나 바로 접속합니다.</div>
     <label>공유 링크</label>
-    <div style="display:flex;gap:7px;margin-bottom:14px">
+    <div class="share-input-row">
       <input type="text" id="shareLinkInput" readonly>
-      <button class="btn" onclick="copyLink()"><i class="ti ti-copy"></i></button>
+      <button class="btn" onclick="copyLink()" style="padding:12px"><i class="ti ti-copy"></i></button>
     </div>
-    <label>현재 접속 중 <span id="memberCount" style="font-weight:400;color:var(--t3)"></span></label>
+    <label>접속 중 <span id="memberCount" style="font-weight:400;color:var(--t3)"></span></label>
     <div id="memberList"></div>
-    <div class="modal-actions"><button class="btn" onclick="closeModal('shareModal')">닫기</button></div>
+    <div class="modal-actions"><button class="btn primary" onclick="closeModal('shareModal')">확인</button></div>
   </div>
 </div>
 
 <div class="overlay" id="pdfModal">
   <div class="modal">
+    <div class="modal-handle"></div>
     <div class="modal-title"><i class="ti ti-file-type-pdf" style="color:var(--redt)"></i>PDF 내보내기</div>
     <div class="modal-sub">선택된 레시피를 PDF로 저장하세요.</div>
-    <div class="modal-actions" style="margin-top:0">
+    <div class="modal-actions">
       <button class="btn" onclick="closeModal('pdfModal')">취소</button>
       <button class="btn primary" onclick="exportPdf()"><i class="ti ti-file-type-pdf"></i>PDF 생성</button>
     </div>
@@ -377,467 +472,337 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--text
 
 <div class="overlay" id="photoModal">
   <div class="modal">
+    <div class="modal-handle"></div>
     <div class="modal-title"><i class="ti ti-photo"></i>사진 추가</div>
-    <div class="modal-sub">최대 <strong>5MB</strong> · JPG, PNG, WEBP만 지원</div>
-    <div class="upload-zone" onclick="document.getElementById('photoInput').click()"
-      ondragover="event.preventDefault();this.classList.add('drag')"
-      ondragleave="this.classList.remove('drag')"
-      ondrop="handlePhotoDrop(event)">
+    <div class="modal-sub">최대 <strong>5MB</strong> · JPG, PNG, WEBP</div>
+    <div class="upload-zone" onclick="document.getElementById('photoInput').click()">
       <i class="ti ti-camera"></i>
       <p><strong>사진 선택</strong> 또는 드래그</p>
-      <p style="margin-top:3px;font-size:11px;color:var(--t3)">최대 5MB · JPG, PNG, WEBP</p>
     </div>
     <input type="file" id="photoInput" accept="image/jpeg,image/png,image/webp" multiple style="display:none" onchange="uploadPhotos(this)">
     <div id="photoProgress"></div>
-    <div class="modal-actions"><button class="btn" onclick="closeModal('photoModal')">닫기</button></div>
+    <div class="modal-actions"><button class="btn primary" onclick="closeModal('photoModal')">닫기</button></div>
   </div>
 </div>
 
 <div id="toast"><i class="ti ti-check" id="toastIcon"></i><span id="toastMsg"></span></div>
 
-<script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js";
-import { getDatabase, ref, set, get, push, update, remove, onValue, serverTimestamp, onDisconnect } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-database.js";
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+<script>
+var CLOUD='dwkbu8pgh',PRESET='mc14as9j',MAX_MB=5;
+var ICONS=['ti-soup','ti-fish','ti-salad','ti-ice-cream','ti-tools-kitchen-2','ti-bowl-chopsticks','ti-bread','ti-pizza','ti-meat','ti-egg','ti-apple','ti-coffee','ti-beer','ti-leaf','ti-flame','ti-star','ti-carrot','ti-lemon'];
+var AV=['#dbeafe:#1d4ed8','#fce7f3:#9d174d','#dcfce7:#166534','#fef3c7:#92400e','#f3e8ff:#6b21a8','#ffedd5:#c2410c'];
 
-const CLOUDINARY_CLOUD = 'dwkbu8pgh';
-const CLOUDINARY_PRESET = 'mc14as9j';
-const MAX_MB = 5;
-const ICONS = ['ti-soup','ti-fish','ti-salad','ti-ice-cream','ti-tools-kitchen-2','ti-bowl-chopsticks','ti-bread','ti-pizza','ti-meat','ti-egg','ti-apple','ti-coffee','ti-beer','ti-leaf','ti-flame','ti-star','ti-carrot','ti-lemon'];
-const AV_PAL = ['#dbeafe:#1d4ed8','#fce7f3:#9d174d','#dcfce7:#166534','#fef3c7:#92400e','#f3e8ff:#6b21a8','#ffedd5:#c2410c'];
+firebase.initializeApp({apiKey:"AIzaSyCoy68_0vIna3tpiQWEcc39GFYmjZ5_YMM",authDomain:"kitchen-big.firebaseapp.com",databaseURL:"https://kitchen-big-default-rtdb.firebaseio.com",projectId:"kitchen-big",storageBucket:"kitchen-big.firebasestorage.app",messagingSenderId:"957524723895",appId:"1:957524723895:web:9d014ebbb7e5c28fb4e532"});
+var db=firebase.database();
 
-const firebaseConfig = {
-  apiKey: "AIzaSyCoy68_0vIna3tpiQWEcc39GFYmjZ5_YMM",
-  authDomain: "kitchen-big.firebaseapp.com",
-  databaseURL: "https://kitchen-big-default-rtdb.firebaseio.com",
-  projectId: "kitchen-big",
-  storageBucket: "kitchen-big.firebasestorage.app",
-  messagingSenderId: "957524723895",
-  appId: "1:957524723895:web:9d014ebbb7e5c28fb4e532"
-};
-const fbApp = initializeApp(firebaseConfig);
-const db = getDatabase(fbApp);
+var myNick='',myId='',cats={},recipes={},activeCat='all',activeId=null,editingCatId=null,selIcon='ti-soup',searchQ='',showFav=false,unsaved=false,editTimer=null;
 
-let myNick='', myId='';
-let categories={}, recipes={};
-let activeCat='all', activeId=null;
-let showFavOnly=false, editingCatId=null, selIcon='ti-soup', searchQ='';
-let unsavedChanges=false;
+function avC(s){var n=0;for(var i=0;i<(s||'').length;i++)n+=s.charCodeAt(i);var p=AV[n%AV.length].split(':');return{bg:p[0],tc:p[1]};}
+function tAgo(ts){if(!ts)return'';var d=Date.now()-ts;if(d<60000)return'방금 전';if(d<3600000)return Math.floor(d/60000)+'분 전';if(d<86400000)return Math.floor(d/3600000)+'시간 전';return Math.floor(d/86400000)+'일 전';}
+function isMobile(){return window.innerWidth<768;}
 
-function avColor(s){let n=0;for(const c of(s||''))n+=c.charCodeAt(0);const[bg,tc]=AV_PAL[n%AV_PAL.length].split(':');return{bg,tc};}
-function timeAgo(ts){if(!ts)return'';const d=Date.now()-ts;if(d<60000)return'방금 전';if(d<3600000)return Math.floor(d/60000)+'분 전';if(d<86400000)return Math.floor(d/3600000)+'시간 전';return Math.floor(d/86400000)+'일 전';}
-
-// ── NICK ──
-window.enterApp = async () => {
-  const nick = document.getElementById('nickInput').value.trim();
+function enterApp(){
+  var nick=document.getElementById('nickInput').value.trim();
   if(!nick){document.getElementById('nickInput').focus();return;}
-  myNick=nick; myId='u_'+Math.random().toString(36).slice(2,8);
-  sessionStorage.setItem('nick',nick); sessionStorage.setItem('uid',myId);
-  const{bg,tc}=avColor(myId);
-  document.getElementById('myNickLabel').textContent=nick;
-  const av=document.getElementById('myAv');
-  av.textContent=nick.charAt(0).toUpperCase(); av.style.background=bg; av.style.color=tc;
-  const presRef=ref(db,`presence/${myId}`);
-  await set(presRef,{nick,id:myId,ts:Date.now()});
-  onDisconnect(presRef).remove();
+  myNick=nick;myId='u_'+Math.random().toString(36).slice(2,8);
+  sessionStorage.setItem('nick',nick);sessionStorage.setItem('uid',myId);
+  var c=avC(myId);var av=document.getElementById('myAv');av.textContent=nick.charAt(0).toUpperCase();av.style.background=c.bg;av.style.color=c.tc;
+  var pr=db.ref('presence/'+myId);pr.set({nick:nick,id:myId,ts:Date.now()});pr.onDisconnect().remove();
   document.getElementById('nickScreen').style.display='none';
   document.getElementById('appScreen').style.display='flex';
-  subscribeAll(); initDefaultCats();
-};
-document.getElementById('nickInput').addEventListener('keydown',e=>{if(e.key==='Enter')window.enterApp();});
+  subscribeAll();initDefaultCats();
+}
+document.getElementById('nickInput').addEventListener('keydown',function(e){if(e.key==='Enter')enterApp();});
+var sN=sessionStorage.getItem('nick');if(sN)document.getElementById('nickInput').value=sN;
 
-// restore session
-const sNick=sessionStorage.getItem('nick'),sUid=sessionStorage.getItem('uid');
-if(sNick&&sUid){document.getElementById('nickInput').value=sNick;}
-
-async function initDefaultCats(){
-  const snap=await get(ref(db,'categories'));
-  if(!snap.exists()){
-    const defs=[{name:'한식',icon:'ti-bowl-chopsticks'},{name:'양식',icon:'ti-tools-kitchen-2'},{name:'일식',icon:'ti-fish'},{name:'디저트',icon:'ti-ice-cream'}];
-    for(const d of defs){const k=push(ref(db,'categories')).key;await set(ref(db,`categories/${k}`),{...d,createdAt:serverTimestamp()});}
-  }
+function initDefaultCats(){
+  db.ref('categories').once('value',function(s){
+    if(!s.exists()){
+      var defs=[{name:'한식',icon:'ti-bowl-chopsticks'},{name:'양식',icon:'ti-tools-kitchen-2'},{name:'일식',icon:'ti-fish'},{name:'디저트',icon:'ti-ice-cream'}];
+      defs.forEach(function(d){var k=db.ref('categories').push().key;db.ref('categories/'+k).set(d);});
+    }
+  });
 }
 
 function subscribeAll(){
-  onValue(ref(db,'presence'),snap=>{const d=snap.val()||{};document.getElementById('onlineCount').textContent=Object.keys(d).length+'명';});
-  onValue(ref(db,'categories'),snap=>{categories=snap.val()||{};renderSidebar();renderRecipeList();});
-  onValue(ref(db,'recipes'),snap=>{recipes=snap.val()||{};renderSidebar();renderRecipeList();if(activeId&&recipes[activeId])renderDetail(activeId);updateFavBadge();});
-  onValue(ref(db,'activity'),snap=>{const d=snap.val()||{};renderActivity(Object.values(d).sort((a,b)=>(b.ts||0)-(a.ts||0)).slice(0,8));});
+  db.ref('presence').on('value',function(s){document.getElementById('onlineCount').textContent=Object.keys(s.val()||{}).length+'명';});
+  db.ref('categories').on('value',function(s){cats=s.val()||{};renderCats();renderRecipes();});
+  db.ref('recipes').on('value',function(s){recipes=s.val()||{};renderCats();renderRecipes();if(activeId&&recipes[activeId])renderDetail(activeId);});
+  db.ref('activity').on('value',function(s){var list=Object.values(s.val()||{}).sort(function(a,b){return(b.ts||0)-(a.ts||0);}).slice(0,8);renderActivity(list);});
+}
+function log(action,rid){var k=db.ref('activity').push().key;db.ref('activity/'+k).set({who:myNick,id:myId,action:action,recId:rid||null,ts:Date.now()});}
+
+// SECTION TABS
+function showSec(id,btn){
+  document.querySelectorAll('.sec-content').forEach(function(e){e.classList.remove('active');});
+  document.querySelectorAll('.sec-tab').forEach(function(e){e.classList.remove('active');});
+  document.getElementById('sec-'+id).classList.add('active');
+  if(btn)btn.classList.add('active');
 }
 
-async function log(action,recId){
-  const k=push(ref(db,'activity')).key;
-  await set(ref(db,`activity/${k}`),{who:myNick,id:myId,action,recId:recId||null,ts:Date.now()});
-}
+// CATS
+function renderCats(){
+  var allCount=Object.keys(recipes).length;
+  // desktop
+  var el=document.getElementById('catListDesktop');el.innerHTML='';
+  var a=document.createElement('button');a.className='cat-chip'+(activeCat==='all'&&!showFav?' active':'');a.textContent='전체 ('+allCount+')';a.onclick=function(){showFav=false;setCategory('all');};el.appendChild(a);
+  // mobile
+  var em=document.getElementById('catScrollMobile');em.innerHTML='';
+  var am=document.createElement('button');am.className='cat-chip'+(activeCat==='all'&&!showFav?' active':'');am.textContent='전체';am.onclick=function(){showFav=false;setCategory('all');};em.appendChild(am);
 
-// ── SAVE STATUS ──
-function setSaveStatus(state, msg){
-  const el=document.getElementById('saveStatus');
-  const spinner=document.getElementById('saveSpinner');
-  const text=document.getElementById('saveStatusText');
-  el.className='save-status '+state;
-  text.textContent=msg;
-  spinner.style.display=state==='saving'?'block':'none';
-}
-
-function markUnsaved(){
-  if(!activeId)return;
-  unsavedChanges=true;
-  setSaveStatus('idle','저장되지 않은 변경사항이 있습니다 — 저장 버튼을 누르세요');
-  document.getElementById('saveBtn').style.background='var(--warn)';
-  document.getElementById('saveBtn').style.borderColor='var(--warn)';
-}
-
-document.addEventListener('input', e=>{
-  if(['dTitle','dMeta','dNote'].includes(e.target.id)) markUnsaved();
-});
-
-// ── SIDEBAR ──
-function renderSidebar(){
-  const el=document.getElementById('catList'); el.innerHTML='';
-  const allD=document.createElement('div');
-  allD.className='sb-item'+(activeCat==='all'&&!showFavOnly?' active':'');
-  allD.innerHTML=`<i class="ti ti-layout-grid"></i>전체<span class="sb-badge">${Object.keys(recipes).length}</span>`;
-  allD.onclick=()=>{showFavOnly=false;setCategory('all');};
-  el.appendChild(allD);
-  Object.entries(categories).forEach(([id,cat])=>{
-    const cnt=Object.values(recipes).filter(r=>r.catId===id).length;
-    const d=document.createElement('div');
-    d.className='sb-item'+(activeCat===id&&!showFavOnly?' active':'');
-    d.innerHTML=`<i class="ti ${cat.icon||'ti-tag'}"></i><span>${cat.name}</span>
-      <button class="edit-cat-btn" onclick="openEditCat(event,'${id}')"><i class="ti ti-pencil" style="font-size:11px"></i></button>
-      <span class="sb-badge">${cnt}</span>`;
-    d.onclick=e=>{if(e.target.closest('.edit-cat-btn'))return;showFavOnly=false;setCategory(id);};
-    el.appendChild(d);
+  Object.entries(cats).forEach(function(en){
+    var id=en[0],cat=en[1];
+    var cnt=Object.values(recipes).filter(function(r){return r.catId===id;}).length;
+    // desktop
+    var d=document.createElement('button');d.className='cat-chip'+(activeCat===id&&!showFav?' active':'');
+    d.innerHTML='<i class="ti '+(cat.icon||'ti-tag')+'" style="margin-right:5px"></i>'+cat.name+' ('+cnt+')';
+    d.onclick=function(){showFav=false;setCategory(id);};el.appendChild(d);
+    // mobile
+    var dm=document.createElement('button');dm.className='cat-chip'+(activeCat===id&&!showFav?' active':'');
+    dm.textContent=cat.name;dm.onclick=function(){showFav=false;setCategory(id);};em.appendChild(dm);
   });
+  // fav
+  var fv=document.createElement('button');fv.className='cat-chip'+(showFav?' active':'');fv.innerHTML='⭐ 즐겨찾기';fv.onclick=function(){showFav=!showFav;setCategory(activeCat);};el.appendChild(fv);
+  var fvm=document.createElement('button');fvm.className='cat-chip'+(showFav?' active':'');fvm.innerHTML='⭐';fvm.onclick=function(){showFav=!showFav;setCategory(activeCat);};em.appendChild(fvm);
+
+  // share btn desktop
+  var sb=document.createElement('button');sb.className='cat-chip';sb.innerHTML='<i class="ti ti-users" style="margin-right:4px"></i>공유';sb.onclick=openShareModal;el.appendChild(sb);
 }
 
 function setCategory(id){
   activeCat=id;
-  const cat=id==='all'?{name:'전체'}:categories[id];
-  const cnt=id==='all'?Object.keys(recipes).length:Object.values(recipes).filter(r=>r.catId===id).length;
-  document.getElementById('colTitle').textContent=`${cat?.name||'전체'} · ${cnt}개`;
-  renderSidebar(); renderRecipeList();
+  var cat=id==='all'?{name:'전체'}:cats[id];
+  var cnt=id==='all'?Object.keys(recipes).length:Object.values(recipes).filter(function(r){return r.catId===id;}).length;
+  var title=(cat?cat.name:'전체')+' · '+cnt+'개';
+  document.getElementById('colTitleDesktop').textContent=title;
+  document.getElementById('colTitleMobile').textContent=title;
+  renderCats();renderRecipes();
 }
-window.toggleFavFilter=()=>{showFavOnly=!showFavOnly;renderSidebar();renderRecipeList();};
-function updateFavBadge(){document.getElementById('favBadge').textContent=Object.values(recipes).filter(r=>r.favs&&r.favs[myId]).length;}
 
-// ── RECIPE LIST ──
-function renderRecipeList(){
-  const el=document.getElementById('recipeList'); el.innerHTML='';
-  let list=Object.entries(recipes).filter(([id,r])=>{
-    if(showFavOnly&&!(r.favs&&r.favs[myId]))return false;
+function renderRecipes(){
+  var list=Object.entries(recipes).filter(function(en){
+    var r=en[1];
+    if(showFav&&!(r.favs&&r.favs[myId]))return false;
     if(activeCat!=='all'&&r.catId!==activeCat)return false;
     if(searchQ&&!(r.name||'').toLowerCase().includes(searchQ))return false;
     return true;
-  }).sort((a,b)=>(b[1].updatedAt||0)-(a[1].updatedAt||0));
-  if(!list.length){el.innerHTML='<div class="empty"><i class="ti ti-notes-off"></i><p>레시피가 없습니다.</p></div>';return;}
-  list.forEach(([id,r])=>{
-    const cat=categories[r.catId]||{name:'기타',icon:'ti-tag'};
-    const photos=r.photos?Object.values(r.photos):[];
-    const thumb=photos.length?`<img src="${photos[0].url}" alt="">`:`<i class="ti ${cat.icon}"></i>`;
-    const isFav=r.favs&&r.favs[myId];
-    const{bg,tc}=avColor(r.editedBy||'');
-    const d=document.createElement('div');
-    d.className='r-card'+(activeId===id?' active':'');
-    d.innerHTML=`<div class="r-thumb">${thumb}</div>
-      <div class="r-name">${r.name||'이름없음'} ${isFav?'<i class="ti ti-star-filled" style="color:#eab308;font-size:11px"></i>':''}</div>
-      <div class="r-meta"><span>${r.meta||''}</span><span class="r-cat-badge">${cat.name}</span></div>
-      <div class="r-edited"><div class="mini-av" style="background:${bg};color:${tc}">${(r.editedByNick||'?').charAt(0)}</div>${r.editedByNick||'?'} · ${timeAgo(r.updatedAt)}</div>`;
-    d.onclick=()=>selectRecipe(id);
-    el.appendChild(d);
+  }).sort(function(a,b){return(b[1].updatedAt||0)-(a[1].updatedAt||0);});
+
+  ['recipeListMobile','recipeListDesktop'].forEach(function(elId){
+    var el=document.getElementById(elId);el.innerHTML='';
+    if(!list.length){el.innerHTML='<div class="empty">레시피가 없습니다.</div>';return;}
+    list.forEach(function(en){
+      var id=en[0],r=en[1];
+      var cat=cats[r.catId]||{name:'기타',icon:'ti-tag'};
+      var photos=r.photos?Object.values(r.photos):[];
+      var thumb=photos.length?'<img src="'+photos[0].url+'" alt="">':'<i class="ti '+cat.icon+'"></i>';
+      var isFav=r.favs&&r.favs[myId];
+      var c=avC(r.editedBy||'');
+      var d=document.createElement('div');d.className='r-card'+(activeId===id?' active':'');
+      d.innerHTML='<div class="r-thumb-sm">'+thumb+'</div><div class="r-info"><div class="r-name">'+(r.name||'이름없음')+(isFav?' ⭐':'')+'</div><div class="r-meta-sm">'+(r.meta||'')+' · '+tAgo(r.updatedAt)+'</div></div><span class="r-cat-badge">'+cat.name+'</span>';
+      d.onclick=function(){selectRecipe(id);};
+      el.appendChild(d);
+    });
   });
 }
-window.filterRecipes=q=>{searchQ=q.toLowerCase();renderRecipeList();};
 
-// ── DETAIL ──
 function selectRecipe(id){
-  if(unsavedChanges&&activeId&&!confirm('저장하지 않은 변경사항이 있습니다. 계속하시겠습니까?'))return;
-  unsavedChanges=false;
-  activeId=id; renderRecipeList(); renderDetail(id);
-  setSaveStatus('idle','변경사항이 있으면 저장 버튼을 누르세요');
-  document.getElementById('saveBtn').style.background='';
-  document.getElementById('saveBtn').style.borderColor='';
+  if(unsaved&&activeId&&!confirm('저장되지 않은 변경사항이 있습니다. 계속할까요?'))return;
+  unsaved=false;activeId=id;
+  renderRecipes();renderDetail(id);
+  setSaveStatus('idle','저장 버튼을 눌러 저장하세요');
+  document.getElementById('saveBtn').style.cssText='';
+  // mobile: scroll to detail
+  if(isMobile()){document.getElementById('detailWrap').scrollIntoView({behavior:'smooth',block:'start'});}
 }
 
 function renderDetail(id){
-  const r=recipes[id]; if(!r)return;
+  var r=recipes[id];if(!r)return;
   document.getElementById('noSelect').style.display='none';
-  document.getElementById('detailContent').style.display='flex';
+  document.getElementById('detailWrap').style.display='block';
   document.getElementById('dTitle').value=r.name||'';
   document.getElementById('dMeta').value=r.meta||'';
   document.getElementById('dNote').value=r.note||'';
-  const isFav=r.favs&&r.favs[myId];
+  var isFav=r.favs&&r.favs[myId];
   document.getElementById('favBtn').innerHTML=isFav?'<i class="ti ti-star-filled" style="color:#eab308"></i>해제':'<i class="ti ti-star"></i>즐겨찾기';
-  if(r.updatedAt) document.getElementById('lastSavedInfo').textContent='마지막 저장: '+timeAgo(r.updatedAt)+' by '+r.editedByNick;
-  else document.getElementById('lastSavedInfo').textContent='';
+  if(r.updatedAt)document.getElementById('lastSavedInfo').textContent=tAgo(r.updatedAt);
 
-  // Photos
-  const pr=document.getElementById('photoRow');
-  pr.innerHTML=`<div class="photo-add" onclick="openPhotoModal()"><i class="ti ti-plus"></i></div>`;
-  if(r.photos) Object.entries(r.photos).forEach(([pid,p])=>{
-    const d=document.createElement('div'); d.className='photo-thumb';
-    d.innerHTML=`<img src="${p.url}" alt="">`;
-    d.onclick=()=>{if(confirm('이 사진을 삭제할까요?'))deletePhoto(id,pid,p.publicId);};
-    pr.insertBefore(d,pr.firstChild);
-  });
+  // photos
+  var pr=document.getElementById('photoRow');pr.innerHTML='<div class="photo-add" onclick="openPhotoModal()"><i class="ti ti-plus"></i></div>';
+  if(r.photos)Object.entries(r.photos).forEach(function(en){var pid=en[0],p=en[1];var d=document.createElement('div');d.className='photo-thumb';d.innerHTML='<img src="'+p.url+'" alt="">';d.onclick=function(){if(confirm('사진을 삭제할까요?'))deletePhoto(id,pid,p.publicId);};pr.insertBefore(d,pr.firstChild);});
 
-  // Ingredients
-  const ig=document.getElementById('dIngGrid'); ig.innerHTML='';
-  (r.ingredients||[]).forEach((ing,i)=>{
-    const d=document.createElement('div'); d.className='ing-chip';
-    d.innerHTML=`<i class="ti ti-circle-dot" style="color:var(--t3);font-size:13px;flex-shrink:0"></i>
-      <input value="${esc(ing)}" placeholder="재료명..." onchange="updIng(${i},this.value)">
-      <button onclick="rmIng(${i})"><i class="ti ti-x"></i></button>`;
-    ig.appendChild(d);
-  });
+  // ingredients
+  var ig=document.getElementById('dIngList');ig.innerHTML='';
+  (r.ingredients||[]).forEach(function(ing,i){var d=document.createElement('div');d.className='ing-chip';d.innerHTML='<i class="ti ti-circle-dot" style="color:var(--t3);font-size:13px;flex-shrink:0"></i><input value="'+esc(ing)+'" placeholder="재료명..." onchange="updIng('+i+',this.value)"><button onclick="rmIng('+i+')"><i class="ti ti-x"></i></button>';ig.appendChild(d);});
 
-  // Steps
-  const sd=document.getElementById('dSteps'); sd.innerHTML='';
-  (r.steps||[]).forEach((step,i)=>{
-    const d=document.createElement('div'); d.className='step-item';
-    d.innerHTML=`<div class="step-n">${i+1}</div>
-      <input class="step-input" value="${esc(step)}" placeholder="조리 과정..." onchange="updStep(${i},this.value)">
-      <button onclick="rmStep(${i})" style="border:none;background:none;cursor:pointer;color:var(--t3);padding:4px;display:flex;align-items:center"><i class="ti ti-x"></i></button>`;
-    sd.appendChild(d);
-  });
+  // steps
+  var sd=document.getElementById('dSteps');sd.innerHTML='';
+  (r.steps||[]).forEach(function(step,i){var d=document.createElement('div');d.className='step-item';d.innerHTML='<div class="step-n">'+(i+1)+'</div><input class="step-input" value="'+esc(step)+'" placeholder="조리 과정..." onchange="updStep('+i+',this.value)"><button onclick="rmStep('+i+')" style="border:none;background:none;cursor:pointer;color:var(--t3);padding:4px;display:flex;align-items:center;flex-shrink:0"><i class="ti ti-x"></i></button>';sd.appendChild(d);});
 
-  if(r.editingBy&&r.editingBy!==myId){document.getElementById('editWho').textContent=r.editingByNick||'다른 사용자';document.getElementById('editInd').style.display='flex';}
+  // editing indicator
+  if(r.editingBy&&r.editingBy!==myId){document.getElementById('editWho').textContent=(r.editingByNick||'다른 사용자')+' 수정 중';document.getElementById('editInd').style.display='flex';}
   else document.getElementById('editInd').style.display='none';
 }
 
-let editTimer=null;
-document.addEventListener('input',e=>{
+document.addEventListener('input',function(e){
   if(!activeId||!['dTitle','dMeta','dNote'].includes(e.target.id))return;
-  update(ref(db,`recipes/${activeId}`),{editingBy:myId,editingByNick:myNick});
-  clearTimeout(editTimer);
-  editTimer=setTimeout(()=>update(ref(db,`recipes/${activeId}`),{editingBy:null,editingByNick:null}),4000);
+  unsaved=true;setSaveStatus('idle','저장되지 않은 변경사항 — 저장 버튼을 누르세요');
+  document.getElementById('saveBtn').style.background='var(--warn)';document.getElementById('saveBtn').style.borderColor='var(--warn)';
+  db.ref('recipes/'+activeId).update({editingBy:myId,editingByNick:myNick});
+  clearTimeout(editTimer);editTimer=setTimeout(function(){db.ref('recipes/'+activeId).update({editingBy:null,editingByNick:null});},4000);
 });
 
-// ── CRUD ──
-window.addIng=async()=>{if(!activeId)return;const ings=[...(recipes[activeId].ingredients||[]),''];await update(ref(db,`recipes/${activeId}`),{ingredients:ings});};
-window.rmIng=async i=>{const ings=[...(recipes[activeId].ingredients||[])];ings.splice(i,1);await update(ref(db,`recipes/${activeId}`),{ingredients:ings});};
-window.updIng=async(i,v)=>{const ings=[...(recipes[activeId].ingredients||[])];ings[i]=v;await update(ref(db,`recipes/${activeId}`),{ingredients:ings});};
-window.addStep=async()=>{if(!activeId)return;const steps=[...(recipes[activeId].steps||[]),''];await update(ref(db,`recipes/${activeId}`),{steps});};
-window.rmStep=async i=>{const steps=[...(recipes[activeId].steps||[])];steps.splice(i,1);await update(ref(db,`recipes/${activeId}`),{steps});};
-window.updStep=async(i,v)=>{const steps=[...(recipes[activeId].steps||[])];steps[i]=v;await update(ref(db,`recipes/${activeId}`),{steps});};
+function setSaveStatus(state,msg){
+  var el=document.getElementById('saveStatus');var sp=document.getElementById('saveSpinner');
+  el.className='save-status '+state;document.getElementById('saveStatusText').textContent=msg;
+  sp.style.display=state==='saving'?'block':'none';
+}
 
-window.saveDetail=async()=>{
+// CRUD
+function addIng(){if(!activeId)return;var ings=[].concat(recipes[activeId].ingredients||[]);ings.push('');db.ref('recipes/'+activeId).update({ingredients:ings});}
+function rmIng(i){var ings=[].concat(recipes[activeId].ingredients||[]);ings.splice(i,1);db.ref('recipes/'+activeId).update({ingredients:ings});}
+function updIng(i,v){var ings=[].concat(recipes[activeId].ingredients||[]);ings[i]=v;db.ref('recipes/'+activeId).update({ingredients:ings});}
+function addStep(){if(!activeId)return;var steps=[].concat(recipes[activeId].steps||[]);steps.push('');db.ref('recipes/'+activeId).update({steps:steps});}
+function rmStep(i){var steps=[].concat(recipes[activeId].steps||[]);steps.splice(i,1);db.ref('recipes/'+activeId).update({steps:steps});}
+function updStep(i,v){var steps=[].concat(recipes[activeId].steps||[]);steps[i]=v;db.ref('recipes/'+activeId).update({steps:steps});}
+
+function saveDetail(){
   if(!activeId)return;
-  const name=document.getElementById('dTitle').value.trim();
-  const meta=document.getElementById('dMeta').value.trim();
-  const note=document.getElementById('dNote').value;
+  var name=document.getElementById('dTitle').value.trim();
+  var meta=document.getElementById('dMeta').value.trim();
+  var note=document.getElementById('dNote').value;
   if(!name){document.getElementById('dTitle').focus();setSaveStatus('error','레시피 이름을 입력하세요');return;}
-  setSaveStatus('saving','저장 중...');
-  document.getElementById('saveBtn').disabled=true;
-  try{
-    await update(ref(db,`recipes/${activeId}`),{name,meta,note,editedBy:myId,editedByNick:myNick,updatedAt:Date.now(),editingBy:null,editingByNick:null});
-    await log(`"${name}" 저장`,activeId);
-    unsavedChanges=false;
-    setSaveStatus('saved','✓ 저장 완료!');
-    document.getElementById('lastSavedInfo').textContent='방금 저장됨 by '+myNick;
-    document.getElementById('saveBtn').style.background='';
-    document.getElementById('saveBtn').style.borderColor='';
-    toast('저장됨','ok');
-    setTimeout(()=>setSaveStatus('idle','변경사항이 있으면 저장 버튼을 누르세요'),3000);
-  }catch(e){
-    setSaveStatus('error','저장 실패 — 다시 시도하세요');
-    toast('저장 실패','warn');
-  }
-  document.getElementById('saveBtn').disabled=false;
-};
+  setSaveStatus('saving','저장 중...');document.getElementById('saveBtn').disabled=true;
+  db.ref('recipes/'+activeId).update({name:name,meta:meta,note:note,editedBy:myId,editedByNick:myNick,updatedAt:Date.now(),editingBy:null,editingByNick:null},function(err){
+    document.getElementById('saveBtn').disabled=false;
+    if(err){setSaveStatus('error','저장 실패');toast('저장 실패','warn');return;}
+    unsaved=false;setSaveStatus('saved','✓ 저장 완료!');
+    document.getElementById('lastSavedInfo').textContent='방금';
+    document.getElementById('saveBtn').style.cssText='';
+    toast('저장됨','ok');log('"'+name+'" 저장',activeId);
+    setTimeout(function(){setSaveStatus('idle','저장 버튼을 눌러 저장하세요');},3000);
+  });
+}
 
-window.deleteRecipe=async()=>{
+function deleteRecipe(){
   if(!activeId||!confirm('이 레시피를 삭제할까요?'))return;
-  const r=recipes[activeId];
-  await remove(ref(db,`recipes/${activeId}`));
-  await log(`"${r?.name}" 삭제`);
-  activeId=null; unsavedChanges=false;
-  document.getElementById('noSelect').style.display='flex';
-  document.getElementById('detailContent').style.display='none';
+  var r=recipes[activeId];db.ref('recipes/'+activeId).remove();log('"'+(r?r.name:'')+ '" 삭제');
+  activeId=null;unsaved=false;
+  document.getElementById('noSelect').style.display='flex';document.getElementById('detailWrap').style.display='none';
   toast('삭제됨','ok');
-};
+}
 
-window.toggleFav=async()=>{
-  if(!activeId)return;
-  const r=recipes[activeId];
-  const isFav=r.favs&&r.favs[myId];
-  if(isFav)await remove(ref(db,`recipes/${activeId}/favs/${myId}`));
-  else await set(ref(db,`recipes/${activeId}/favs/${myId}`),true);
-};
+function toggleFav(){
+  if(!activeId)return;var r=recipes[activeId];var isFav=r.favs&&r.favs[myId];
+  if(isFav)db.ref('recipes/'+activeId+'/favs/'+myId).remove();
+  else db.ref('recipes/'+activeId+'/favs/'+myId).set(true);
+}
 
-// ── CATEGORY ──
-window.openAddCat=()=>{editingCatId=null;selIcon='ti-soup';document.getElementById('catModalTitle').textContent='카테고리 추가';document.getElementById('catNameInput').value='';document.getElementById('catDelBtn').style.display='none';renderIconPicker();document.getElementById('catModal').classList.add('open');setTimeout(()=>document.getElementById('catNameInput').focus(),50);};
-window.openEditCat=(e,id)=>{e.stopPropagation();const cat=categories[id];if(!cat)return;editingCatId=id;selIcon=cat.icon||'ti-tag';document.getElementById('catModalTitle').textContent='카테고리 수정';document.getElementById('catNameInput').value=cat.name;document.getElementById('catDelBtn').style.display='flex';renderIconPicker();document.getElementById('catModal').classList.add('open');setTimeout(()=>document.getElementById('catNameInput').focus(),50);};
-function renderIconPicker(){document.getElementById('iconPicker').innerHTML=ICONS.map(ic=>`<div class="icon-opt${selIcon===ic?' sel':''}" onclick="pickIcon('${ic}')"><i class="ti ${ic}"></i></div>`).join('');}
-window.pickIcon=ic=>{selIcon=ic;renderIconPicker();};
-window.saveCat=async()=>{const name=document.getElementById('catNameInput').value.trim();if(!name){document.getElementById('catNameInput').focus();return;}if(editingCatId){await update(ref(db,`categories/${editingCatId}`),{name,icon:selIcon});toast('수정됨','ok');}else{const k=push(ref(db,'categories')).key;await set(ref(db,`categories/${k}`),{name,icon:selIcon,createdAt:serverTimestamp()});toast('추가됨','ok');}closeModal('catModal');};
-window.deleteCat=async()=>{if(!editingCatId)return;if(Object.values(recipes).some(r=>r.catId===editingCatId)){toast('레시피가 있어 삭제 불가','warn');return;}if(!confirm('삭제할까요?'))return;await remove(ref(db,`categories/${editingCatId}`));if(activeCat===editingCatId)setCategory('all');closeModal('catModal');toast('삭제됨','ok');};
+// CATEGORY
+function openAddCat(){editingCatId=null;selIcon='ti-soup';document.getElementById('catModalTitle').textContent='카테고리 추가';document.getElementById('catNameInput').value='';document.getElementById('catDelBtn').style.display='none';renderIconPicker();document.getElementById('catModal').classList.add('open');setTimeout(function(){document.getElementById('catNameInput').focus();},100);}
+function openEditCat(id){var cat=cats[id];if(!cat)return;editingCatId=id;selIcon=cat.icon||'ti-tag';document.getElementById('catModalTitle').textContent='카테고리 수정';document.getElementById('catNameInput').value=cat.name;document.getElementById('catDelBtn').style.display='inline-flex';renderIconPicker();document.getElementById('catModal').classList.add('open');setTimeout(function(){document.getElementById('catNameInput').focus();},100);}
+function renderIconPicker(){document.getElementById('iconPicker').innerHTML=ICONS.map(function(ic){return'<div class="icon-opt'+(selIcon===ic?' sel':'')+'" onclick="pickIcon(\''+ic+'\')"><i class="ti '+ic+'"></i></div>';}).join('');}
+function pickIcon(ic){selIcon=ic;renderIconPicker();}
+function saveCat(){var name=document.getElementById('catNameInput').value.trim();if(!name){document.getElementById('catNameInput').focus();return;}if(editingCatId)db.ref('categories/'+editingCatId).update({name:name,icon:selIcon});else{var k=db.ref('categories').push().key;db.ref('categories/'+k).set({name:name,icon:selIcon});}closeModal('catModal');toast(editingCatId?'수정됨':'추가됨','ok');}
+function deleteCat(){if(!editingCatId)return;if(Object.values(recipes).some(function(r){return r.catId===editingCatId;})){toast('레시피가 있어 삭제 불가','warn');return;}if(!confirm('삭제할까요?'))return;db.ref('categories/'+editingCatId).remove();if(activeCat===editingCatId)setCategory('all');closeModal('catModal');toast('삭제됨','ok');}
 
-// ── ADD RECIPE ──
-window.openAddRecipe=()=>{
-  const sel=document.getElementById('newRCat');
-  sel.innerHTML=Object.entries(categories).map(([id,c])=>`<option value="${id}">${c.name}</option>`).join('');
-  if(activeCat!=='all'){const o=sel.querySelector(`option[value="${activeCat}"]`);if(o)o.selected=true;}
-  document.getElementById('newRName').value=''; document.getElementById('newRMeta').value='';
-  document.getElementById('addRecipeModal').classList.add('open');
-  setTimeout(()=>document.getElementById('newRName').focus(),50);
-};
-window.addRecipe=async()=>{
-  const name=document.getElementById('newRName').value.trim();
-  const catId=document.getElementById('newRCat').value;
-  const meta=document.getElementById('newRMeta').value.trim();
+// ADD RECIPE
+function openAddRecipe(){var sel=document.getElementById('newRCat');sel.innerHTML=Object.entries(cats).map(function(en){return'<option value="'+en[0]+'">'+en[1].name+'</option>';}).join('');if(activeCat!=='all'){var o=sel.querySelector('option[value="'+activeCat+'"]');if(o)o.selected=true;}document.getElementById('newRName').value='';document.getElementById('newRMeta').value='';document.getElementById('addRecipeModal').classList.add('open');setTimeout(function(){document.getElementById('newRName').focus();},100);}
+function addRecipe(){
+  var name=document.getElementById('newRName').value.trim(),catId=document.getElementById('newRCat').value,meta=document.getElementById('newRMeta').value.trim();
   if(!name){document.getElementById('newRName').focus();return;}
-  const k=push(ref(db,'recipes')).key;
-  await set(ref(db,`recipes/${k}`),{name,catId,meta,ingredients:['재료를 입력하세요'],steps:['조리 과정을 입력하세요'],note:'',editedBy:myId,editedByNick:myNick,createdAt:serverTimestamp(),updatedAt:Date.now()});
-  await log(`"${name}" 추가`,k);
-  closeModal('addRecipeModal');
-  selectRecipe(k);
-  toast(`"${name}" 추가됨`,'ok');
-};
+  var k=db.ref('recipes').push().key;
+  db.ref('recipes/'+k).set({name:name,catId:catId,meta:meta,ingredients:['재료를 입력하세요'],steps:['조리 과정을 입력하세요'],note:'',editedBy:myId,editedByNick:myNick,createdAt:Date.now(),updatedAt:Date.now()});
+  log('"'+name+'" 추가',k);closeModal('addRecipeModal');selectRecipe(k);toast('"'+name+'" 추가됨','ok');
+}
 
-// ── SHARE ──
-window.openShareModal=async()=>{
+// SHARE
+function openShareModal(){
   document.getElementById('shareLinkInput').value=window.location.href;
-  const snap=await get(ref(db,'presence'));
-  const pres=snap.val()||{};
-  const members=Object.values(pres);
-  document.getElementById('memberCount').textContent=members.length+'명';
-  document.getElementById('memberList').innerHTML=members.map(m=>{
-    const{bg,tc}=avColor(m.id||'');
-    const isMe=m.id===myId;
-    return`<div style="display:flex;align-items:center;gap:8px;padding:8px 10px;background:var(--s2);border-radius:var(--radius);border:1px solid var(--border);margin-bottom:5px">
-      <div class="av" style="background:${bg};color:${tc};width:30px;height:30px;font-size:12px">${(m.nick||'?').charAt(0).toUpperCase()}</div>
-      <div style="flex:1"><div style="font-size:12px;font-weight:500">${m.nick||'알 수 없음'} ${isMe?'<span style="font-size:10px;color:var(--t3)">(나)</span>':''}</div></div>
-      <span style="font-size:10px;padding:2px 8px;border-radius:99px;background:var(--okbg);color:var(--okt);font-weight:500">🟢 온라인</span>
-    </div>`;
-  }).join('');
+  db.ref('presence').once('value',function(s){
+    var pres=Object.values(s.val()||{});
+    document.getElementById('memberCount').textContent=pres.length+'명';
+    document.getElementById('memberList').innerHTML=pres.map(function(m){var c=avC(m.id||'');var isMe=m.id===myId;return'<div class="member-row"><div class="av" style="background:'+c.bg+';color:'+c.tc+';width:32px;height:32px;font-size:12px">'+(m.nick||'?').charAt(0).toUpperCase()+'</div><div class="member-info"><div class="member-name">'+(m.nick||'?')+(isMe?' (나)':'')+'</div></div><span class="role-badge" style="background:var(--okbg);color:var(--okt)">🟢 온라인</span></div>';}).join('');
+  });
   document.getElementById('shareModal').classList.add('open');
-};
-window.copyLink=()=>{navigator.clipboard.writeText(window.location.href).then(()=>toast('링크 복사됨','ok'));};
+}
+function copyLink(){navigator.clipboard.writeText(window.location.href).then(function(){toast('링크 복사됨','ok');}).catch(function(){toast('복사 실패 — 주소창에서 직접 복사하세요','warn');});}
 
-// ── PHOTOS (Cloudinary) ──
-window.openPhotoModal=()=>{
-  if(!activeId){toast('레시피를 먼저 선택하세요','warn');return;}
-  document.getElementById('photoProgress').innerHTML='';
-  document.getElementById('photoModal').classList.add('open');
-};
-window.handlePhotoDrop=e=>{e.preventDefault();e.currentTarget.classList.remove('drag');uploadPhotos({files:e.dataTransfer.files});};
-window.uploadPhotos=async input=>{
+// PHOTOS
+function openPhotoModal(){if(!activeId){toast('레시피를 먼저 선택하세요','warn');return;}document.getElementById('photoProgress').innerHTML='';document.getElementById('photoModal').classList.add('open');}
+function uploadPhotos(input){
   if(!activeId||!input.files.length)return;
-  const prog=document.getElementById('photoProgress');
-  for(const file of input.files){
-    if(!['image/jpeg','image/png','image/webp'].includes(file.type)){toast(`${file.name}: 지원하지 않는 형식`,'warn');continue;}
-    if(file.size>MAX_MB*1024*1024){toast(`최대 ${MAX_MB}MB까지만 업로드 가능합니다`,'warn');continue;}
-    const wrap=document.createElement('div'); wrap.style.marginTop='8px';
-    const label=document.createElement('div'); label.style.cssText='font-size:12px;color:var(--t2);margin-bottom:4px'; label.textContent=file.name;
-    const bar=document.createElement('div'); bar.className='prog-bar';
-    const fill=document.createElement('div'); fill.className='prog-fill'; fill.style.width='0%';
-    bar.appendChild(fill); wrap.appendChild(label); wrap.appendChild(bar); prog.appendChild(wrap);
+  var prog=document.getElementById('photoProgress');
+  Array.prototype.forEach.call(input.files,function(file){
+    if(!['image/jpeg','image/png','image/webp'].includes(file.type)){toast(file.name+': 지원하지 않는 형식','warn');return;}
+    if(file.size>MAX_MB*1024*1024){toast('최대 '+MAX_MB+'MB까지 업로드 가능합니다','warn');return;}
+    var wrap=document.createElement('div');wrap.style.marginTop='8px';
+    var label=document.createElement('div');label.style.cssText='font-size:12px;color:var(--t2);margin-bottom:4px';label.textContent=file.name;
+    var bar=document.createElement('div');bar.className='prog-bar';var fill=document.createElement('div');fill.className='prog-fill';fill.style.width='0%';
+    bar.appendChild(fill);wrap.appendChild(label);wrap.appendChild(bar);prog.appendChild(wrap);
+    var fd=new FormData();fd.append('file',file);fd.append('upload_preset',PRESET);
+    fill.style.width='30%';
+    fetch('https://api.cloudinary.com/v1_1/'+CLOUD+'/image/upload',{method:'POST',body:fd})
+      .then(function(r){fill.style.width='80%';return r.json();})
+      .then(function(data){
+        var url=data.secure_url,pid=data.public_id;
+        var k=db.ref('recipes/'+activeId+'/photos').push().key;
+        db.ref('recipes/'+activeId+'/photos/'+k).set({url:url,publicId:pid,name:file.name});
+        fill.style.width='100%';fill.style.background='var(--ok)';label.textContent='✓ '+file.name;
+        toast('업로드 완료','ok');
+      }).catch(function(){fill.style.background='var(--red)';label.textContent='✗ 실패: '+file.name;toast('업로드 실패','warn');});
+  });
+}
+function deletePhoto(recId,pid,publicId){db.ref('recipes/'+recId+'/photos/'+pid).remove();toast('사진 삭제됨','ok');}
 
-    try{
-      // Upload to Cloudinary
-      const formData=new FormData();
-      formData.append('file',file);
-      formData.append('upload_preset',CLOUDINARY_PRESET);
-      fill.style.width='30%'; label.textContent='업로드 중... '+file.name;
-      const res=await fetch(`https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD}/image/upload`,{method:'POST',body:formData});
-      fill.style.width='80%';
-      if(!res.ok)throw new Error('업로드 실패');
-      const data=await res.json();
-      const url=data.secure_url;
-      const publicId=data.public_id;
-      const k=push(ref(db,`recipes/${activeId}/photos`)).key;
-      await set(ref(db,`recipes/${activeId}/photos/${k}`),{url,publicId,name:file.name});
-      fill.style.width='100%'; fill.style.background='var(--ok)';
-      label.textContent='✓ '+file.name+' 완료';
-      toast('사진 업로드 완료','ok');
-    }catch(e){
-      fill.style.background='var(--red)'; label.textContent='✗ 실패: '+file.name;
-      toast('업로드 실패: '+file.name,'warn');
-    }
-  }
-};
+// PDF
+function openPdfModal(){if(!activeId){toast('레시피를 먼저 선택하세요','warn');return;}document.getElementById('pdfModal').classList.add('open');}
+function exportPdf(){
+  if(!activeId)return;var r=recipes[activeId];var cat=cats[r.catId]||{name:'기타'};
+  var w=window.open('','_blank');
+  w.document.write('<!DOCTYPE html><html lang="ko"><head><meta charset="UTF-8"><title>'+r.name+'</title><link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600&display=swap" rel="stylesheet"><style>body{font-family:\'Noto Sans KR\',sans-serif;max-width:620px;margin:40px auto;padding:24px;color:#18181b}h1{font-size:26px;font-weight:600;margin-bottom:4px}.meta{font-size:13px;color:#71717a;margin-bottom:24px;padding-bottom:14px;border-bottom:1px solid #e5e5e3}h2{font-size:11px;font-weight:600;color:#a1a1aa;text-transform:uppercase;letter-spacing:.07em;margin:18px 0 10px;border-top:1px solid #e5e5e3;padding-top:14px}.grid{display:grid;grid-template-columns:1fr 1fr;gap:6px}.chip{background:#f4f4f3;padding:6px 10px;border-radius:6px;font-size:13px}.step{display:flex;gap:10px;margin-bottom:9px;font-size:13px;line-height:1.6;align-items:flex-start}.sn{width:20px;height:20px;border-radius:50%;background:#2563eb;color:#fff;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:600;flex-shrink:0;margin-top:2px}.note{background:#f4f4f3;padding:12px;border-radius:8px;font-size:13px;line-height:1.6}@media print{body{margin:0;padding:16px}}</style></head><body><h1>'+(r.name||'')+'</h1><div class="meta">'+(r.meta||'')+' · '+cat.name+' · 레시피 북</div><h2>재료</h2><div class="grid">'+((r.ingredients||[]).map(function(i){return'<div class="chip">'+i+'</div>';}).join(''))+'</div><h2>조리 순서</h2>'+((r.steps||[]).map(function(s,i){return'<div class="step"><div class="sn">'+(i+1)+'</div><div>'+s+'</div></div>';}).join(''))+(r.note?'<h2>메모</h2><div class="note">'+r.note+'</div>':'')+'</body></html>');
+  w.document.close();setTimeout(function(){w.print();},600);closeModal('pdfModal');
+}
 
-window.deletePhoto=async(recId,pid,publicId)=>{
-  // Delete from Cloudinary (unsigned delete not supported — just remove from DB)
-  await remove(ref(db,`recipes/${recId}/photos/${pid}`));
-  toast('사진 삭제됨','ok');
-};
-
-// ── PDF ──
-window.openPdfModal=()=>{if(!activeId){toast('레시피를 먼저 선택하세요','warn');return;}document.getElementById('pdfModal').classList.add('open');};
-window.exportPdf=()=>{
-  if(!activeId)return;
-  const r=recipes[activeId]; const cat=categories[r.catId]||{name:'기타'};
-  const w=window.open('','_blank');
-  w.document.write(`<!DOCTYPE html><html lang="ko"><head><meta charset="UTF-8"><title>${r.name}</title>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600&display=swap" rel="stylesheet">
-    <style>body{font-family:'Noto Sans KR',sans-serif;max-width:620px;margin:40px auto;padding:24px;color:#18181b}
-    h1{font-size:26px;font-weight:600;margin-bottom:4px}.meta{font-size:13px;color:#71717a;margin-bottom:24px;padding-bottom:14px;border-bottom:1px solid #e5e5e3}
-    h2{font-size:11px;font-weight:600;color:#a1a1aa;text-transform:uppercase;letter-spacing:.07em;margin:18px 0 10px;border-top:1px solid #e5e5e3;padding-top:14px}
-    .grid{display:grid;grid-template-columns:1fr 1fr;gap:6px}.chip{background:#f4f4f3;padding:6px 10px;border-radius:6px;font-size:13px}
-    .step{display:flex;gap:10px;margin-bottom:9px;font-size:13px;line-height:1.6;align-items:flex-start}
-    .sn{width:20px;height:20px;border-radius:50%;background:#2563eb;color:#fff;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:600;flex-shrink:0;margin-top:2px}
-    .note{background:#f4f4f3;padding:12px;border-radius:8px;font-size:13px;line-height:1.6}
-    @media print{body{margin:0;padding:16px}}</style></head><body>
-    <h1>${r.name||''}</h1><div class="meta">${r.meta||''} · ${cat.name} · 레시피 북</div>
-    <h2>재료</h2><div class="grid">${(r.ingredients||[]).map(i=>`<div class="chip">${i}</div>`).join('')}</div>
-    <h2>조리 순서</h2>${(r.steps||[]).map((s,i)=>`<div class="step"><div class="sn">${i+1}</div><div>${s}</div></div>`).join('')}
-    ${r.note?`<h2>메모</h2><div class="note">${r.note}</div>`:''}
-    </body></html>`);
-  w.document.close(); setTimeout(()=>w.print(),600); closeModal('pdfModal');
-};
-
-// ── ACTIVITY ──
+// ACTIVITY
 function renderActivity(list){
-  const el=document.getElementById('actFeed');
-  if(!list.length){el.innerHTML='<div style="font-size:11px;color:var(--t3)">아직 활동이 없습니다.</div>';return;}
-  el.innerHTML=list.map(a=>{const{bg,tc}=avColor(a.id||'');return`<div class="act-item"><div class="av" style="background:${bg};color:${tc};width:20px;height:20px;font-size:9px;border:none">${(a.who||'?').charAt(0)}</div><span><strong>${a.who}</strong>님이 ${a.action}</span><span class="act-time">${timeAgo(a.ts)}</span></div>`;}).join('');
+  var el=document.getElementById('actFeed');
+  if(!list.length){el.innerHTML='<div style="text-align:center;color:var(--t3);font-size:12px;padding:16px">아직 활동이 없습니다.</div>';return;}
+  el.innerHTML=list.map(function(a){var c=avC(a.id||'');return'<div class="act-item"><div class="av" style="background:'+c.bg+';color:'+c.tc+';width:22px;height:22px;font-size:9px;border:none">'+((a.who||'?').charAt(0))+'</div><span style="flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:12px"><strong>'+a.who+'</strong> '+a.action+'</span><span class="act-time">'+tAgo(a.ts)+'</span></div>';}).join('');
 }
 
-// ── AI ──
-window.quickAsk=msg=>{document.getElementById('aiInput').value=msg;sendAi();};
-window.handleAiKey=e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendAi();}};
-window.sendAi=async()=>{
-  const input=document.getElementById('aiInput');
-  const msg=input.value.trim(); if(!msg)return;
-  input.value=''; addAiMsg(msg,'user'); showTyping();
-  const r=activeId&&recipes[activeId];
-  const ctx=r?`현재 레시피: ${r.name}, 재료: ${(r.ingredients||[]).join(', ')}.`:'레시피 미선택.';
-  try{
-    const res=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-6',max_tokens:1000,messages:[{role:'user',content:`당신은 레시피 어시스턴트입니다. ${ctx} 질문: ${msg}. 한국어로 간결하게 답하세요.`}]})});
-    const data=await res.json();
-    removeTyping(); addAiMsg(data.content?.[0]?.text||'답변을 가져오지 못했어요.','ai');
-  }catch(e){removeTyping();addAiMsg('네트워크 오류가 발생했어요.','ai');}
-};
-function addAiMsg(text,role){
-  const el=document.getElementById('aiMsgs');
-  const d=document.createElement('div'); d.className='ai-msg '+role;
-  d.innerHTML=`<div class="ai-role">${role==='user'?myNick||'나':'AI 어시스턴트'}</div><div class="ai-bubble">${text.replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>').replace(/\n/g,'<br>')}</div>`;
-  el.appendChild(d); el.scrollTop=el.scrollHeight;
+// AI
+function aiSend(msg,msgsEl,inputEl){
+  if(!msg)return;inputEl.value='';
+  var r=activeId&&recipes[activeId];var ctx=r?'현재 레시피: '+r.name+', 재료: '+(r.ingredients||[]).join(', ')+'.':'레시피 미선택.';
+  addAiMsg(msg,'user',msgsEl);showTyping(msgsEl);
+  fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-6',max_tokens:800,messages:[{role:'user',content:'당신은 레시피 어시스턴트입니다. '+ctx+' 질문: '+msg+'. 한국어로 간결하게 답하세요.'}]})})
+    .then(function(res){return res.json();})
+    .then(function(data){removeTyping(msgsEl);addAiMsg((data.content&&data.content[0]&&data.content[0].text)||'답변을 가져오지 못했어요.','ai',msgsEl);})
+    .catch(function(){removeTyping(msgsEl);addAiMsg('네트워크 오류가 발생했어요.','ai',msgsEl);});
 }
-function showTyping(){const el=document.getElementById('aiMsgs');const d=document.createElement('div');d.className='ai-msg ai';d.id='typing';d.innerHTML='<div class="ai-role">AI 어시스턴트</div><div class="ai-bubble"><div class="typing"><span></span><span></span><span></span></div></div>';el.appendChild(d);el.scrollTop=el.scrollHeight;}
-function removeTyping(){const t=document.getElementById('typing');if(t)t.remove();}
+function addAiMsg(text,role,el){var d=document.createElement('div');d.className=role==='user'?'ai-user':'ai-bot';d.innerHTML='<div class="ai-msg-role">'+(role==='user'?(myNick||'나'):'AI 어시스턴트')+'</div><div class="ai-bubble">'+text.replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>').replace(/\n/g,'<br>')+'</div>';el.appendChild(d);el.scrollTop=el.scrollHeight;}
+function showTyping(el){var d=document.createElement('div');d.className='ai-bot';d.id='typing-'+el.id;d.innerHTML='<div class="ai-msg-role">AI 어시스턴트</div><div class="ai-bubble"><div class="typing"><span></span><span></span><span></span></div></div>';el.appendChild(d);el.scrollTop=el.scrollHeight;}
+function removeTyping(el){var t=document.getElementById('typing-'+el.id);if(t)t.remove();}
+// mobile AI
+function quickAsk(msg){document.getElementById('aiInput').value=msg;sendAi();}
+function sendAi(){var el=document.getElementById('aiMsgs');var input=document.getElementById('aiInput');aiSend(input.value.trim(),el,input);}
+function handleAiKey(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendAi();}}
+// desktop AI
+function quickAskD(msg){document.getElementById('aiInputDesktop').value=msg;sendAiD();}
+function sendAiD(){var el=document.getElementById('aiMsgsDesktop');var input=document.getElementById('aiInputDesktop');aiSend(input.value.trim(),el,input);}
+function handleAiKeyD(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendAiD();}}
 
-// ── UTILS ──
 function esc(s){return(s||'').replace(/"/g,'&quot;').replace(/</g,'&lt;');}
-window.closeModal=id=>document.getElementById(id).classList.remove('open');
-let toastT=null;
-function toast(msg,type){
-  const t=document.getElementById('toast');
-  document.getElementById('toastMsg').textContent=msg;
-  document.getElementById('toastIcon').className=type==='ok'?'ti ti-check':'ti ti-alert-triangle';
-  t.style.background=type==='warn'?'#92400e':'#18181b';
-  t.classList.add('show');
-  if(toastT)clearTimeout(toastT);
-  toastT=setTimeout(()=>t.classList.remove('show'),2500);
-}
-window.toast=toast;
-document.addEventListener('keydown',e=>{
-  if((e.metaKey||e.ctrlKey)&&e.key==='s'){e.preventDefault();if(activeId)window.saveDetail();}
-  if(e.key==='Escape')document.querySelectorAll('.overlay.open').forEach(o=>o.classList.remove('open'));
-});
-window.addEventListener('beforeunload',e=>{if(unsavedChanges){e.preventDefault();e.returnValue='';}});
+function closeModal(id){document.getElementById(id).classList.remove('open');}
+var toastT=null;
+function toast(msg,type){var t=document.getElementById('toast');document.getElementById('toastMsg').textContent=msg;document.getElementById('toastIcon').className=type==='ok'?'ti ti-check':'ti ti-alert-triangle';t.style.background=type==='warn'?'#92400e':'#18181b';t.classList.add('show');if(toastT)clearTimeout(toastT);toastT=setTimeout(function(){t.classList.remove('show');},2500);}
+
+document.addEventListener('keydown',function(e){if(e.key==='Escape')document.querySelectorAll('.overlay.open').forEach(function(o){o.classList.remove('open');});if((e.metaKey||e.ctrlKey)&&e.key==='s'){e.preventDefault();if(activeId)saveDetail();}});
+document.querySelectorAll('.overlay').forEach(function(o){o.addEventListener('click',function(e){if(e.target===o)o.classList.remove('open');});});
+window.addEventListener('beforeunload',function(e){if(unsaved){e.preventDefault();e.returnValue='';}});
 </script>
 </body>
 </html>
