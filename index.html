@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>레시피 북</title>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600&display=swap" rel="stylesheet">
+<title>레시피 북 — 홈</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
@@ -16,193 +16,182 @@
   --ok:#16a34a;--okbg:#f0fdf4;--okt:#15803d;
   --warn:#d97706;--warnbg:#fffbeb;--warnt:#b45309;
   --red:#dc2626;--redbg:#fef2f2;--redt:#b91c1c;
-  --radius:8px;
+  --radius:10px;
 }
-body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--text);height:100vh;overflow:hidden;font-size:14px}
+body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;font-size:14px}
 
-/* ── NICKNAME SCREEN ── */
-#nickScreen{display:flex;align-items:center;justify-content:center;height:100vh;background:var(--bg)}
-.nick-card{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:36px 32px;width:360px;text-align:center}
-.nick-logo{font-size:44px;margin-bottom:14px}
-.nick-title{font-size:20px;font-weight:600;margin-bottom:4px}
-.nick-sub{font-size:13px;color:var(--t2);margin-bottom:24px}
-.nick-input{width:100%;padding:11px 14px;border:1px solid var(--border);border-radius:var(--radius);font-size:14px;font-family:inherit;outline:none;text-align:center;margin-bottom:12px;transition:border-color .15s}
+/* ── NICK SCREEN ── */
+#nickScreen{display:flex;align-items:center;justify-content:center;min-height:100vh;background:linear-gradient(135deg,#1e293b,#334155)}
+.nick-card{background:#fff;border-radius:20px;padding:40px 36px;width:360px;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,.3)}
+.nick-logo{font-size:48px;margin-bottom:14px}
+.nick-title{font-size:22px;font-weight:700;margin-bottom:6px}
+.nick-sub{font-size:13px;color:var(--t2);margin-bottom:26px;line-height:1.5}
+.nick-input{width:100%;padding:12px 16px;border:1.5px solid var(--border);border-radius:var(--radius);font-size:15px;font-family:inherit;outline:none;text-align:center;margin-bottom:12px;transition:border-color .15s}
 .nick-input:focus{border-color:var(--accent)}
-.nick-btn{width:100%;padding:12px;border:none;border-radius:var(--radius);background:var(--accent);color:#fff;font-size:14px;font-weight:500;cursor:pointer;font-family:inherit}
+.nick-btn{width:100%;padding:13px;border:none;border-radius:var(--radius);background:var(--accent);color:#fff;font-size:15px;font-weight:600;cursor:pointer;font-family:inherit;transition:opacity .15s}
 .nick-btn:hover{opacity:.9}
 .nick-tip{font-size:11px;color:var(--t3);margin-top:10px}
 
-/* ── LAYOUT ── */
-#appScreen{display:none;height:100vh;flex-direction:column}
-.topbar{height:50px;background:var(--surface);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 14px;gap:10px;flex-shrink:0}
-.logo{font-size:15px;font-weight:600;display:flex;align-items:center;gap:7px}
-.logo i{color:var(--accent);font-size:18px}
-.topbar-right{margin-left:auto;display:flex;align-items:center;gap:8px}
-.online-pill{display:flex;align-items:center;gap:5px;padding:4px 10px;background:var(--okbg);border-radius:99px;font-size:11px;color:var(--okt);font-weight:500}
+/* ── APP ── */
+#appScreen{display:none;min-height:100vh;flex-direction:column}
+
+/* TOPBAR */
+.topbar{height:54px;background:var(--surface);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 20px;gap:12px;position:sticky;top:0;z-index:100}
+.logo{font-size:16px;font-weight:700;display:flex;align-items:center;gap:8px;cursor:pointer;text-decoration:none;color:var(--text)}
+.logo i{color:var(--accent);font-size:22px}
+.topbar-nav{display:flex;gap:2px;margin-left:16px}
+.nav-link{padding:6px 12px;border-radius:var(--radius);font-size:13px;color:var(--t2);cursor:pointer;text-decoration:none;display:flex;align-items:center;gap:6px;transition:all .15s;border:none;background:none;font-family:inherit}
+.nav-link:hover{background:var(--s2);color:var(--text)}
+.nav-link.active{background:var(--abg);color:var(--at);font-weight:500}
+.topbar-right{margin-left:auto;display:flex;align-items:center;gap:10px}
+.online-pill{display:flex;align-items:center;gap:5px;padding:5px 11px;background:var(--okbg);border-radius:99px;font-size:11px;color:var(--okt);font-weight:500}
 .pulse{width:6px;height:6px;border-radius:50%;background:var(--ok);animation:pulse 2s infinite}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
-.av{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;border:2px solid var(--surface);flex-shrink:0}
-.nick-display{font-size:12px;color:var(--t2);display:flex;align-items:center;gap:6px}
-.icon-btn{width:30px;height:30px;border:1px solid var(--border);border-radius:var(--radius);background:none;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--t2)}
+.av{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;border:2px solid var(--surface);flex-shrink:0;cursor:pointer}
+.nick-label{font-size:12px;color:var(--t2)}
+
+/* MAIN CONTENT */
+.main{flex:1;padding:28px 24px;max-width:1200px;margin:0 auto;width:100%}
+.page{display:none}
+.page.active{display:block}
+
+/* HERO */
+.hero{background:linear-gradient(135deg,#1e293b,#334155);border-radius:16px;padding:36px 32px;color:#fff;margin-bottom:28px;display:flex;align-items:center;gap:24px}
+.hero-text h1{font-size:26px;font-weight:700;margin-bottom:8px}
+.hero-text p{font-size:14px;opacity:.7;line-height:1.6;margin-bottom:20px}
+.hero-btn{padding:10px 20px;border:none;border-radius:var(--radius);background:var(--accent);color:#fff;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;display:inline-flex;align-items:center;gap:7px;text-decoration:none}
+.hero-btn:hover{opacity:.9}
+.hero-emoji{font-size:72px;flex-shrink:0}
+
+/* GRID */
+.section-title{font-size:16px;font-weight:700;margin-bottom:14px;display:flex;align-items:center;gap:8px}
+.cards-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px;margin-bottom:32px}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:18px;transition:all .15s;cursor:pointer}
+.card:hover{border-color:var(--border2);box-shadow:0 4px 16px rgba(0,0,0,.06);transform:translateY(-1px)}
+.card-icon{width:42px;height:42px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:22px;margin-bottom:12px}
+.card-title{font-size:14px;font-weight:600;margin-bottom:4px}
+.card-desc{font-size:12px;color:var(--t2);line-height:1.5}
+
+/* ── NOTES ── */
+.notes-layout{display:grid;grid-template-columns:220px 1fr;gap:16px;height:calc(100vh - 160px)}
+.notes-sidebar{background:var(--surface);border:1px solid var(--border);border-radius:14px;overflow-y:auto}
+.notes-sb-header{padding:12px 14px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+.notes-sb-title{font-size:13px;font-weight:600}
+.icon-btn{width:28px;height:28px;border:1px solid var(--border);border-radius:8px;background:none;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--t2)}
 .icon-btn:hover{background:var(--s2)}
+.note-item{padding:10px 14px;border-bottom:1px solid var(--border);cursor:pointer;transition:background .1s}
+.note-item:hover{background:var(--s2)}
+.note-item.active{background:var(--abg);border-left:3px solid var(--accent)}
+.note-item-title{font-size:12px;font-weight:500;margin-bottom:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.note-item-preview{font-size:11px;color:var(--t3);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.note-item-date{font-size:10px;color:var(--t3);margin-top:2px}
+.notes-editor{background:var(--surface);border:1px solid var(--border);border-radius:14px;display:flex;flex-direction:column}
+.note-editor-toolbar{padding:10px 14px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px}
+.note-title-input{width:100%;padding:16px 18px 0;font-size:18px;font-weight:600;border:none;outline:none;font-family:inherit;color:var(--text);background:transparent}
+.note-body-input{flex:1;padding:12px 18px;font-size:13px;border:none;outline:none;font-family:inherit;color:var(--text);resize:none;background:transparent;line-height:1.8}
+.note-empty{display:flex;align-items:center;justify-content:center;height:100%;color:var(--t3);flex-direction:column;gap:10px}
+.note-empty i{font-size:40px}
 
-.body{display:flex;flex:1;overflow:hidden}
-
-/* ── SIDEBAR ── */
-.sidebar{width:210px;background:var(--surface);border-right:1px solid var(--border);display:flex;flex-direction:column;flex-shrink:0}
-.sb-search{padding:10px 10px 6px}
-.sb-search input{width:100%;padding:7px 10px 7px 28px;border:1px solid var(--border);border-radius:var(--radius);font-size:12px;font-family:inherit;outline:none;background:var(--bg)}
-.sb-search input:focus{border-color:var(--accent)}
-.sb-search-wrap{position:relative}
-.sb-search-wrap i{position:absolute;left:8px;top:50%;transform:translateY(-50%);font-size:13px;color:var(--t3)}
-.sb-sec{padding:8px 10px 2px}
-.sb-label{font-size:10px;font-weight:600;color:var(--t3);letter-spacing:.08em;text-transform:uppercase;padding:3px 6px;display:flex;align-items:center;justify-content:space-between}
-.sb-label button{width:20px;height:20px;border:none;background:none;cursor:pointer;border-radius:4px;color:var(--t3);display:flex;align-items:center;justify-content:center}
-.sb-label button:hover{background:var(--s2);color:var(--accent)}
-.sb-item{display:flex;align-items:center;gap:7px;padding:6px 8px;border-radius:var(--radius);cursor:pointer;font-size:12px;color:var(--t2);margin-bottom:1px;transition:background .1s;position:relative}
-.sb-item:hover{background:var(--s2)}
-.sb-item.active{background:var(--abg);color:var(--at);font-weight:500}
-.sb-item i{font-size:15px;width:16px;flex-shrink:0}
-.sb-badge{margin-left:auto;font-size:10px;padding:1px 6px;border-radius:99px;background:var(--s2);border:1px solid var(--border);color:var(--t3)}
-.sb-item.active .sb-badge{background:rgba(37,99,235,.1);border-color:transparent;color:var(--at)}
-.edit-cat-btn{position:absolute;right:6px;opacity:0;width:20px;height:20px;border:none;background:var(--s2);border-radius:4px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--t2)}
-.sb-item:hover .edit-cat-btn{opacity:1}
-.sb-item:hover .sb-badge{display:none}
-.sb-item.active .edit-cat-btn,.sb-item.active .sb-badge{display:none}
-.sb-bottom{padding:10px;border-top:1px solid var(--border);margin-top:auto}
-.share-main-btn{width:100%;padding:8px;border:1.5px dashed var(--accent);border-radius:var(--radius);background:var(--abg);color:var(--at);font-size:12px;font-weight:500;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;font-family:inherit}
-.share-main-btn:hover{border-style:solid}
-
-/* ── RECIPE LIST ── */
-.recipe-col{width:235px;border-right:1px solid var(--border);overflow-y:auto;flex-shrink:0;background:var(--bg)}
-.col-header{padding:10px 12px;background:var(--surface);border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px;position:sticky;top:0;z-index:1}
-.col-title{font-size:13px;font-weight:600;flex:1}
-.btn{padding:5px 10px;border:1px solid var(--border);border-radius:var(--radius);background:var(--surface);font-size:12px;color:var(--t2);cursor:pointer;display:flex;align-items:center;gap:5px;font-family:inherit;transition:all .15s;white-space:nowrap}
+/* ── BOARD ── */
+.board-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
+.btn{padding:7px 14px;border:1px solid var(--border);border-radius:var(--radius);background:var(--surface);font-size:12px;color:var(--t2);cursor:pointer;display:inline-flex;align-items:center;gap:6px;font-family:inherit;transition:all .15s}
 .btn:hover{background:var(--s2);border-color:var(--border2)}
 .btn.primary{background:var(--accent);color:#fff;border-color:var(--accent)}
 .btn.primary:hover{opacity:.88}
 .btn.danger{color:var(--redt);border-color:#fca5a5}
 .btn.danger:hover{background:var(--redbg)}
-.r-card{padding:11px 12px;border-bottom:1px solid var(--border);cursor:pointer;background:var(--surface);transition:background .1s;position:relative}
-.r-card:hover{background:#fafaf9}
-.r-card.active{background:var(--abg);border-left:3px solid var(--accent)}
-.r-thumb{width:100%;height:76px;border-radius:8px;background:var(--s2);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:26px;color:var(--t3);margin-bottom:7px;overflow:hidden}
-.r-thumb img{width:100%;height:100%;object-fit:cover}
-.r-name{font-size:13px;font-weight:600;margin-bottom:3px}
-.r-meta{font-size:10px;color:var(--t3);display:flex;align-items:center;gap:5px}
-.r-cat-badge{font-size:9px;padding:2px 6px;border-radius:99px;background:var(--abg);color:var(--at);font-weight:500;margin-left:auto}
-.r-edited{font-size:10px;color:var(--t3);display:flex;align-items:center;gap:4px;margin-top:4px}
-.mini-av{width:14px;height:14px;border-radius:50%;font-size:7px;font-weight:600;display:flex;align-items:center;justify-content:center}
-.empty-state{padding:40px 20px;text-align:center;color:var(--t3)}
-.empty-state i{font-size:36px;display:block;margin-bottom:8px}
-.empty-state p{font-size:12px}
+.post-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:16px 18px;margin-bottom:10px;transition:all .15s}
+.post-card:hover{border-color:var(--border2);box-shadow:0 2px 8px rgba(0,0,0,.05)}
+.post-header{display:flex;align-items:flex-start;gap:10px;margin-bottom:8px}
+.post-av{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;flex-shrink:0}
+.post-meta{flex:1}
+.post-author{font-size:12px;font-weight:600}
+.post-time{font-size:10px;color:var(--t3)}
+.post-title{font-size:14px;font-weight:600;margin-bottom:6px;cursor:pointer}
+.post-title:hover{color:var(--accent)}
+.post-body{font-size:13px;color:var(--t2);line-height:1.6;margin-bottom:10px}
+.post-footer{display:flex;align-items:center;gap:12px}
+.post-action{display:flex;align-items:center;gap:5px;font-size:12px;color:var(--t3);cursor:pointer;padding:4px 8px;border-radius:6px;transition:all .15s}
+.post-action:hover{background:var(--s2);color:var(--t2)}
+.post-action.liked{color:var(--red)}
+.comment-area{border-top:1px solid var(--border);margin-top:10px;padding-top:10px;display:none}
+.comment-item{display:flex;gap:8px;margin-bottom:8px;font-size:12px}
+.comment-input-row{display:flex;gap:8px}
+.comment-input{flex:1;padding:7px 10px;border:1px solid var(--border);border-radius:8px;font-size:12px;font-family:inherit;outline:none;background:var(--bg)}
+.comment-input:focus{border-color:var(--accent)}
+.empty-board{text-align:center;padding:60px 20px;color:var(--t3)}
+.empty-board i{font-size:44px;display:block;margin-bottom:10px}
 
-/* ── DETAIL ── */
-.detail{flex:1;display:flex;flex-direction:column;overflow:hidden;min-width:0}
-.detail-toolbar{padding:9px 14px;background:var(--surface);border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px;flex-wrap:wrap;flex-shrink:0}
-.editing-ind{font-size:11px;padding:3px 9px;border-radius:99px;background:var(--warnbg);color:var(--warnt);border:1px solid #fcd34d;display:flex;align-items:center;gap:5px}
-.detail-scroll{flex:1;overflow-y:auto;padding:18px}
-.detail-title-input{font-size:22px;font-weight:600;border:none;outline:none;background:transparent;width:100%;font-family:inherit;color:var(--text);padding:0;margin-bottom:4px}
-.detail-meta-input{font-size:12px;color:var(--t2);border:none;outline:none;background:transparent;width:100%;font-family:inherit;padding:0}
-.sec-head{font-size:10px;font-weight:600;color:var(--t3);text-transform:uppercase;letter-spacing:.07em;margin:14px 0 8px;display:flex;align-items:center;gap:5px}
-.ing-grid{display:grid;grid-template-columns:1fr 1fr;gap:5px;margin-bottom:8px}
-.ing-chip{display:flex;align-items:center;gap:5px;padding:6px 8px;background:var(--s2);border:1px solid var(--border);border-radius:var(--radius);font-size:12px}
-.ing-chip input{border:none;outline:none;background:transparent;font-size:12px;width:100%;font-family:inherit;color:var(--text)}
-.ing-chip button{border:none;background:none;cursor:pointer;color:var(--t3);padding:0;font-size:12px;display:flex;align-items:center}
-.ing-chip button:hover{color:var(--red)}
-.step-item{display:flex;gap:8px;margin-bottom:8px;font-size:13px;line-height:1.6;align-items:flex-start}
-.step-n{width:20px;height:20px;border-radius:50%;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:600;flex-shrink:0;margin-top:3px}
-.step-input{flex:1;border:none;border-bottom:1px solid var(--border);outline:none;background:transparent;font-size:13px;font-family:inherit;color:var(--text);padding:2px 0;line-height:1.5}
-.step-input:focus{border-bottom-color:var(--accent)}
-.divider{border:none;border-top:1px solid var(--border);margin:14px 0}
-.note-area{width:100%;border:1px solid var(--border);border-radius:var(--radius);padding:9px 11px;font-size:12px;font-family:inherit;resize:none;height:72px;background:var(--s2);color:var(--text);outline:none;line-height:1.6}
-.note-area:focus{border-color:var(--accent);background:var(--surface)}
-.photo-row{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:10px}
-.photo-thumb{width:68px;height:68px;border-radius:8px;border:1px solid var(--border);overflow:hidden;cursor:pointer;background:var(--s2);display:flex;align-items:center;justify-content:center;font-size:22px;color:var(--t3);position:relative}
-.photo-thumb img{width:100%;height:100%;object-fit:cover}
-.photo-thumb:hover::after{content:'✕';position:absolute;inset:0;background:rgba(0,0,0,.5);color:#fff;display:flex;align-items:center;justify-content:center;font-size:16px}
-.photo-add{width:68px;height:68px;border-radius:8px;border:1.5px dashed var(--border2);background:var(--s2);display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--t3);font-size:22px;transition:all .15s}
-.photo-add:hover{border-color:var(--accent);color:var(--accent);background:var(--abg)}
+/* ── MESSENGER ── */
+.messenger-layout{display:grid;grid-template-columns:220px 1fr;gap:16px;height:calc(100vh - 160px)}
+.chat-sidebar{background:var(--surface);border:1px solid var(--border);border-radius:14px;overflow-y:auto}
+.chat-sb-header{padding:12px 14px;border-bottom:1px solid var(--border);font-size:13px;font-weight:600}
+.chat-room-item{padding:10px 14px;border-bottom:1px solid var(--border);cursor:pointer;transition:background .1s;display:flex;align-items:center;gap:8px}
+.chat-room-item:hover{background:var(--s2)}
+.chat-room-item.active{background:var(--abg)}
+.chat-room-icon{width:34px;height:34px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
+.chat-room-name{font-size:12px;font-weight:500}
+.chat-room-last{font-size:11px;color:var(--t3);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.unread-badge{margin-left:auto;width:18px;height:18px;border-radius:50%;background:var(--accent);color:#fff;font-size:10px;font-weight:600;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.chat-main{background:var(--surface);border:1px solid var(--border);border-radius:14px;display:flex;flex-direction:column}
+.chat-header{padding:12px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px}
+.chat-title{font-size:14px;font-weight:600}
+.chat-online{font-size:11px;color:var(--okt)}
+.chat-messages{flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:10px}
+.msg{display:flex;gap:8px;max-width:75%}
+.msg.mine{align-self:flex-end;flex-direction:row-reverse}
+.msg-av{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;flex-shrink:0;align-self:flex-end}
+.msg-content{}
+.msg-name{font-size:10px;color:var(--t3);margin-bottom:2px}
+.msg-bubble{padding:8px 12px;border-radius:12px;font-size:13px;line-height:1.5;word-break:break-word}
+.msg .msg-bubble{background:var(--s2);border-radius:4px 12px 12px 12px}
+.msg.mine .msg-bubble{background:var(--accent);color:#fff;border-radius:12px 4px 12px 12px}
+.msg-time{font-size:10px;color:var(--t3);margin-top:2px;text-align:right}
+.chat-input-area{padding:12px 14px;border-top:1px solid var(--border);display:flex;gap:8px;align-items:flex-end}
+.chat-input{flex:1;padding:9px 12px;border:1px solid var(--border);border-radius:var(--radius);font-size:13px;font-family:inherit;outline:none;resize:none;max-height:100px;background:var(--bg);line-height:1.5}
+.chat-input:focus{border-color:var(--accent);background:var(--surface)}
+.chat-send{width:36px;height:36px;border:none;border-radius:var(--radius);background:var(--accent);color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.chat-send:hover{opacity:.88}
 
-/* ── ACTIVITY ── */
-.act-panel{padding:12px 14px;border-top:1px solid var(--border);background:var(--surface);flex-shrink:0}
-.act-items{display:flex;flex-direction:column;gap:5px;max-height:84px;overflow-y:auto}
-.act-item{display:flex;align-items:center;gap:7px;font-size:11px;color:var(--t2)}
-.act-time{margin-left:auto;color:var(--t3);font-size:10px;white-space:nowrap}
+/* ── NEWS ── */
+.news-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px}
+.news-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;overflow:hidden;transition:all .15s;cursor:pointer}
+.news-card:hover{border-color:var(--border2);box-shadow:0 4px 16px rgba(0,0,0,.06);transform:translateY(-2px)}
+.news-thumb{height:140px;background:linear-gradient(135deg,var(--s2),var(--s3));display:flex;align-items:center;justify-content:center;font-size:40px}
+.news-body{padding:14px}
+.news-tag{font-size:10px;font-weight:600;color:var(--at);background:var(--abg);padding:2px 8px;border-radius:99px;display:inline-block;margin-bottom:8px}
+.news-title{font-size:13px;font-weight:600;margin-bottom:6px;line-height:1.4}
+.news-desc{font-size:12px;color:var(--t2);line-height:1.5;margin-bottom:10px}
+.news-footer{font-size:11px;color:var(--t3);display:flex;justify-content:space-between}
 
 /* ── MODALS ── */
 .overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.4);align-items:center;justify-content:center;z-index:1000;padding:16px}
 .overlay.open{display:flex}
-.modal{background:var(--surface);border-radius:14px;padding:20px;width:100%;max-width:380px;border:1px solid var(--border)}
-.modal-title{font-size:15px;font-weight:600;margin-bottom:3px;display:flex;align-items:center;gap:8px}
-.modal-sub{font-size:12px;color:var(--t2);margin-bottom:16px}
+.modal{background:var(--surface);border-radius:16px;padding:22px;width:100%;max-width:500px;border:1px solid var(--border)}
+.modal-title{font-size:16px;font-weight:700;margin-bottom:4px;display:flex;align-items:center;gap:8px}
+.modal-sub{font-size:12px;color:var(--t2);margin-bottom:18px}
 .modal label{font-size:11px;font-weight:500;color:var(--t2);display:block;margin-bottom:4px;margin-top:12px}
 .modal label:first-of-type{margin-top:0}
-.modal input,.modal select{width:100%;padding:8px 11px;border:1px solid var(--border);border-radius:var(--radius);font-size:13px;font-family:inherit;outline:none;background:var(--bg);color:var(--text);transition:border .15s}
-.modal input:focus,.modal select:focus{border-color:var(--accent);background:var(--surface)}
-.modal-actions{display:flex;gap:7px;justify-content:flex-end;margin-top:16px}
-.icon-picker{display:flex;flex-wrap:wrap;gap:5px;margin-top:5px}
-.icon-opt{width:34px;height:34px;border:1px solid var(--border);border-radius:var(--radius);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:16px;color:var(--t2);transition:all .15s}
-.icon-opt:hover{border-color:var(--accent);color:var(--accent)}
-.icon-opt.sel{border-color:var(--accent);background:var(--abg);color:var(--at)}
-.member-row{display:flex;align-items:center;gap:8px;padding:8px 10px;background:var(--s2);border-radius:var(--radius);border:1px solid var(--border);margin-bottom:5px}
-.member-info{flex:1}
-.member-name{font-size:12px;font-weight:500}
-.member-since{font-size:10px;color:var(--t3)}
-.role-badge{font-size:10px;padding:2px 8px;border-radius:99px;font-weight:500}
-.upload-zone{border:2px dashed var(--border);border-radius:var(--radius);padding:22px;text-align:center;cursor:pointer;transition:all .15s}
-.upload-zone:hover,.upload-zone.drag{border-color:var(--accent);background:var(--abg)}
-.upload-zone i{font-size:28px;color:var(--t3);display:block;margin-bottom:6px}
-.upload-zone p{font-size:12px;color:var(--t2)}
-.upload-zone strong{color:var(--at)}
-.file-item{display:flex;align-items:center;gap:7px;padding:7px 9px;background:var(--s2);border:1px solid var(--border);border-radius:var(--radius);margin-top:7px;font-size:12px}
-.file-item i{color:var(--redt);font-size:16px}
-.file-name{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:500}
-.file-size{color:var(--t3)}
-.prog-bar{height:3px;background:var(--s3);border-radius:99px;margin-top:6px;overflow:hidden}
-.prog-fill{height:100%;background:var(--accent);border-radius:99px;transition:width .2s}
-.no-select{flex:1;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:10px;color:var(--t3)}
-.no-select i{font-size:40px}
-.no-select p{font-size:13px}
+.modal input,.modal textarea,.modal select{width:100%;padding:9px 12px;border:1px solid var(--border);border-radius:var(--radius);font-size:13px;font-family:inherit;outline:none;background:var(--bg);color:var(--text);transition:border .15s}
+.modal input:focus,.modal textarea:focus{border-color:var(--accent);background:var(--surface)}
+.modal textarea{resize:vertical;min-height:100px;line-height:1.6}
+.modal-actions{display:flex;gap:8px;justify-content:flex-end;margin-top:18px}
 
-/* ── TOAST ── */
-#toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#18181b;color:#fff;padding:9px 18px;border-radius:99px;font-size:13px;display:none;align-items:center;gap:7px;z-index:9999;white-space:nowrap;box-shadow:0 4px 16px rgba(0,0,0,.2)}
+/* TOAST */
+#toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#18181b;color:#fff;padding:10px 20px;border-radius:99px;font-size:13px;display:none;align-items:center;gap:8px;z-index:9999;white-space:nowrap;box-shadow:0 4px 20px rgba(0,0,0,.25)}
 #toast.show{display:flex}
 
-/* ── AI PANEL ── */
-.ai-panel{width:240px;border-left:1px solid var(--border);display:flex;flex-direction:column;background:var(--surface);flex-shrink:0}
-.ai-header{padding:10px 12px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
-.ai-title{font-size:12px;font-weight:600;display:flex;align-items:center;gap:6px}
-.ai-dot{width:6px;height:6px;border-radius:50%;background:var(--ok)}
-.ai-msgs{flex:1;overflow-y:auto;padding:10px}
-.ai-msg{margin-bottom:9px}
-.ai-role{font-size:10px;color:var(--t3);margin-bottom:2px;font-weight:500}
-.ai-bubble{font-size:12px;line-height:1.55;padding:7px 9px;border-radius:8px}
-.ai-msg.user .ai-bubble{background:var(--abg);color:var(--at)}
-.ai-msg.ai .ai-bubble{background:var(--s2);border:1px solid var(--border);color:var(--text)}
-.ai-footer{padding:9px;border-top:1px solid var(--border)}
-.ai-quick{display:flex;flex-wrap:wrap;gap:4px;margin-bottom:7px}
-.ai-qbtn{font-size:11px;padding:3px 8px;border:1px solid var(--border);border-radius:99px;background:var(--s2);color:var(--t2);cursor:pointer}
-.ai-qbtn:hover{border-color:var(--accent);color:var(--at)}
-.ai-row{display:flex;gap:5px}
-.ai-input{flex:1;resize:none;border:1px solid var(--border);border-radius:var(--radius);padding:6px 8px;font-size:12px;background:var(--s2);color:var(--text);font-family:inherit;outline:none;height:32px}
-.ai-input:focus{border-color:var(--accent);background:var(--surface)}
-.ai-send{padding:6px 9px;background:var(--accent);color:#fff;border:none;border-radius:var(--radius);cursor:pointer;font-size:13px;display:flex;align-items:center}
-.ai-send:hover{opacity:.88}
-.typing span{display:inline-block;width:4px;height:4px;background:var(--t3);border-radius:50%;margin:0 1px;animation:blink 1.2s infinite}
-.typing span:nth-child(2){animation-delay:.2s}
-.typing span:nth-child(3){animation-delay:.4s}
-@keyframes blink{0%,80%,100%{opacity:.3}40%{opacity:1}}
+.divider{border:none;border-top:1px solid var(--border);margin:10px 0}
 </style>
 </head>
 <body>
 
-<!-- NICKNAME -->
+<!-- NICK -->
 <div id="nickScreen">
   <div class="nick-card">
     <div class="nick-logo">🍳</div>
-    <div class="nick-title">레시피 북에 오신 것을 환영합니다</div>
-    <div class="nick-sub">사용하실 닉네임을 입력해주세요</div>
+    <div class="nick-title">레시피 북</div>
+    <div class="nick-sub">팀과 함께 레시피를 만들고<br>공유하는 협업 플랫폼</div>
     <input class="nick-input" id="nickInput" type="text" placeholder="닉네임 입력..." maxlength="12" autofocus>
     <button class="nick-btn" onclick="enterApp()">입장하기</button>
     <div class="nick-tip">닉네임은 협업자들에게 표시됩니다</div>
@@ -210,197 +199,154 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--text
 </div>
 
 <!-- APP -->
-<div id="appScreen" style="display:none;flex-direction:column;height:100vh">
+<div id="appScreen" style="display:none;flex-direction:column;min-height:100vh">
   <div class="topbar">
-    <div class="logo"><i class="ti ti-chef-hat"></i>레시피 북</div>
+    <a class="logo" onclick="showPage('home')"><i class="ti ti-chef-hat"></i>레시피 북</a>
+    <div class="topbar-nav">
+      <button class="nav-link active" id="nav-home" onclick="showPage('home')"><i class="ti ti-home"></i>홈</button>
+      <button class="nav-link" id="nav-notes" onclick="showPage('notes')"><i class="ti ti-note"></i>노트</button>
+      <button class="nav-link" id="nav-news" onclick="showPage('news')"><i class="ti ti-news"></i>뉴스</button>
+      <button class="nav-link" id="nav-board" onclick="showPage('board')"><i class="ti ti-message-circle"></i>게시판</button>
+      <button class="nav-link" id="nav-chat" onclick="showPage('chat')"><i class="ti ti-messages"></i>메신저</button>
+      <a class="nav-link" href="recipe.html"><i class="ti ti-book"></i>레시피</a>
+    </div>
     <div class="topbar-right">
-      <div class="online-pill"><div class="pulse"></div><span id="onlineCount">0명 접속</span></div>
-      <div class="nick-display">
-        <div class="av" id="myAv" style="background:#dbeafe;color:#1d4ed8">나</div>
-        <span id="myNick">사용자</span>
-      </div>
-      <button class="icon-btn" onclick="openShareModal()" title="공유"><i class="ti ti-share" style="font-size:15px"></i></button>
+      <div class="online-pill"><div class="pulse"></div><span id="onlineCount">0명</span></div>
+      <div class="av" id="myAv" style="background:#dbeafe;color:#1d4ed8">나</div>
+      <span class="nick-label" id="myNickLabel">사용자</span>
     </div>
   </div>
-  <div class="body">
-    <!-- SIDEBAR -->
-    <div class="sidebar">
-      <div class="sb-search">
-        <div class="sb-search-wrap">
-          <i class="ti ti-search"></i>
-          <input type="text" placeholder="레시피 검색..." oninput="filterRecipes(this.value)">
+
+  <div class="main">
+    <!-- HOME -->
+    <div class="page active" id="page-home">
+      <div class="hero">
+        <div class="hero-text">
+          <h1>안녕하세요, <span id="heroNick">사용자</span>님! 👋</h1>
+          <p>레시피를 만들고, 노트를 작성하고,<br>팀원과 실시간으로 소통하세요.</p>
+          <a class="hero-btn" href="recipe.html"><i class="ti ti-book"></i>레시피 앱 열기</a>
+        </div>
+        <div class="hero-emoji">🍳</div>
+      </div>
+      <div class="section-title"><i class="ti ti-layout-grid" style="color:var(--accent)"></i>빠른 메뉴</div>
+      <div class="cards-grid">
+        <div class="card" onclick="location.href='recipe.html'">
+          <div class="card-icon" style="background:#eff6ff">🍲</div>
+          <div class="card-title">레시피 앱</div>
+          <div class="card-desc">레시피를 추가하고 팀원과 실시간으로 함께 편집하세요.</div>
+        </div>
+        <div class="card" onclick="showPage('notes')">
+          <div class="card-icon" style="background:#f0fdf4">📝</div>
+          <div class="card-title">노트</div>
+          <div class="card-desc">아이디어, 메모, 식재료 리스트를 노트로 정리하세요.</div>
+        </div>
+        <div class="card" onclick="showPage('news')">
+          <div class="card-icon" style="background:#fffbeb">📰</div>
+          <div class="card-title">뉴스</div>
+          <div class="card-desc">최신 요리 트렌드와 식품 뉴스를 확인하세요.</div>
+        </div>
+        <div class="card" onclick="showPage('board')">
+          <div class="card-icon" style="background:#fef2f2">💬</div>
+          <div class="card-title">게시판</div>
+          <div class="card-desc">팀원과 자유롭게 소통하고 정보를 공유하세요.</div>
+        </div>
+        <div class="card" onclick="showPage('chat')">
+          <div class="card-icon" style="background:#f3e8ff">💬</div>
+          <div class="card-title">인스턴트 메신저</div>
+          <div class="card-desc">채팅방에서 팀원과 실시간으로 대화하세요.</div>
         </div>
       </div>
-      <div class="sb-sec">
-        <div class="sb-label">카테고리
-          <button onclick="openAddCat()" title="추가"><i class="ti ti-plus" style="font-size:12px"></i></button>
-        </div>
-        <div id="catList"></div>
-      </div>
-      <div class="sb-sec">
-        <div class="sb-label">보관함</div>
-        <div class="sb-item" onclick="openShareModal()"><i class="ti ti-users"></i>공유 & 멤버</div>
-        <div class="sb-item" onclick="openPdfModal()"><i class="ti ti-file-type-pdf"></i>PDF 내보내기</div>
-        <div class="sb-item" id="favSbItem" onclick="toggleFavFilter()"><i class="ti ti-star"></i>즐겨찾기<span class="sb-badge" id="favBadge">0</span></div>
-      </div>
-      <div class="sb-bottom">
-        <button class="share-main-btn" onclick="openShareModal()"><i class="ti ti-share" style="font-size:14px"></i>공유 & 협업 관리</button>
-      </div>
+      <div class="section-title"><i class="ti ti-activity" style="color:var(--accent)"></i>실시간 활동</div>
+      <div id="homeActivity" style="background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:16px"></div>
     </div>
 
-    <!-- RECIPE LIST -->
-    <div class="recipe-col">
-      <div class="col-header">
-        <span class="col-title" id="colTitle">전체</span>
-        <button class="btn primary" onclick="openAddRecipe()"><i class="ti ti-plus"></i>추가</button>
-      </div>
-      <div id="recipeList"></div>
-    </div>
-
-    <!-- DETAIL -->
-    <div class="detail">
-      <div class="no-select" id="noSelect"><i class="ti ti-book"></i><p>레시피를 선택하세요</p></div>
-      <div id="detailContent" style="display:none;flex-direction:column;height:100%">
-        <div class="detail-toolbar">
-          <span class="editing-ind" id="editInd" style="display:none"><i class="ti ti-pencil" style="font-size:11px"></i><span id="editWho"></span> 수정 중</span>
-          <div style="flex:1"></div>
-          <button class="btn" onclick="toggleFav()" id="favBtn"><i class="ti ti-star"></i>즐겨찾기</button>
-          <button class="btn" onclick="openPhotoModal()"><i class="ti ti-photo"></i>사진</button>
-          <button class="btn" onclick="openPdfModal()"><i class="ti ti-file-export"></i>PDF</button>
-          <button class="btn primary" onclick="saveDetail()"><i class="ti ti-device-floppy"></i>저장</button>
-          <button class="btn danger" onclick="deleteRecipe()" style="padding:5px 8px"><i class="ti ti-trash"></i></button>
-        </div>
-        <div class="detail-scroll" id="detailScroll">
-          <input class="detail-title-input" id="dTitle" placeholder="레시피 이름">
-          <input class="detail-meta-input" id="dMeta" placeholder="예: 30분 · 2인분">
-          <div class="sec-head"><i class="ti ti-photo"></i>사진</div>
-          <div class="photo-row" id="photoRow">
-            <div class="photo-add" onclick="openPhotoModal()"><i class="ti ti-plus"></i></div>
+    <!-- NOTES -->
+    <div class="page" id="page-notes">
+      <div class="section-title"><i class="ti ti-note" style="color:var(--accent)"></i>노트</div>
+      <div class="notes-layout">
+        <div class="notes-sidebar">
+          <div class="notes-sb-header">
+            <span class="notes-sb-title">내 노트</span>
+            <button class="icon-btn" onclick="newNote()"><i class="ti ti-plus" style="font-size:14px"></i></button>
           </div>
-          <div class="divider"></div>
-          <div class="sec-head"><i class="ti ti-carrot"></i>재료</div>
-          <div class="ing-grid" id="dIngGrid"></div>
-          <button class="btn" onclick="addIng()" style="margin-bottom:6px;font-size:12px"><i class="ti ti-plus"></i>재료 추가</button>
-          <div class="divider"></div>
-          <div class="sec-head"><i class="ti ti-list-numbers"></i>조리 순서</div>
-          <div id="dSteps"></div>
-          <button class="btn" onclick="addStep()" style="margin-bottom:6px;font-size:12px"><i class="ti ti-plus"></i>단계 추가</button>
-          <div class="divider"></div>
-          <div class="sec-head"><i class="ti ti-note"></i>공유 메모</div>
-          <textarea class="note-area" id="dNote" placeholder="팁, 변형 방법, 주의사항..."></textarea>
+          <div id="noteList"></div>
         </div>
-        <div class="act-panel">
-          <div class="sec-head" style="margin:0 0 7px"><i class="ti ti-activity"></i>실시간 활동</div>
-          <div class="act-items" id="actFeed"></div>
+        <div class="notes-editor">
+          <div class="note-editor-toolbar">
+            <button class="btn" onclick="saveNote()"><i class="ti ti-device-floppy"></i>저장</button>
+            <button class="btn danger" onclick="deleteNote()" id="deleteNoteBtn" style="display:none"><i class="ti ti-trash"></i>삭제</button>
+            <span style="margin-left:auto;font-size:11px;color:var(--t3)" id="noteStatus"></span>
+          </div>
+          <div id="noteEditorEmpty" class="note-empty"><i class="ti ti-note-off"></i><span>노트를 선택하거나 새로 만드세요</span></div>
+          <div id="noteEditorContent" style="display:none;flex-direction:column;flex:1">
+            <input class="note-title-input" id="noteTitleInput" placeholder="제목을 입력하세요...">
+            <textarea class="note-body-input" id="noteBodyInput" placeholder="내용을 입력하세요..."></textarea>
+          </div>
         </div>
       </div>
     </div>
 
-    <!-- AI PANEL -->
-    <div class="ai-panel">
-      <div class="ai-header">
-        <div class="ai-title"><div class="ai-dot"></div>AI 노트</div>
+    <!-- NEWS -->
+    <div class="page" id="page-news">
+      <div class="board-header">
+        <div class="section-title" style="margin-bottom:0"><i class="ti ti-news" style="color:var(--accent)"></i>요리 & 식품 뉴스</div>
+        <button class="btn" onclick="loadNews()"><i class="ti ti-refresh"></i>새로고침</button>
       </div>
-      <div class="ai-msgs" id="aiMsgs">
-        <div class="ai-msg ai">
-          <div class="ai-role">AI 어시스턴트</div>
-          <div class="ai-bubble">안녕하세요! 레시피 도우미입니다. 재료 대체, 칼로리, 조리법 변형 등 무엇이든 물어보세요 🍳</div>
+      <div style="margin-bottom:16px"></div>
+      <div class="news-grid" id="newsGrid"></div>
+    </div>
+
+    <!-- BOARD -->
+    <div class="page" id="page-board">
+      <div class="board-header">
+        <div class="section-title" style="margin-bottom:0"><i class="ti ti-message-circle" style="color:var(--accent)"></i>게시판</div>
+        <button class="btn primary" onclick="openPostModal()"><i class="ti ti-plus"></i>글쓰기</button>
+      </div>
+      <div style="margin-bottom:16px"></div>
+      <div id="boardList"></div>
+    </div>
+
+    <!-- CHAT -->
+    <div class="page" id="page-chat">
+      <div class="section-title"><i class="ti ti-messages" style="color:var(--accent)"></i>메신저</div>
+      <div class="messenger-layout">
+        <div class="chat-sidebar">
+          <div class="chat-sb-header">채팅방</div>
+          <div id="roomList"></div>
+        </div>
+        <div class="chat-main">
+          <div class="chat-header">
+            <div class="chat-room-icon" id="chatRoomIcon" style="background:var(--abg);font-size:18px">💬</div>
+            <div>
+              <div class="chat-title" id="chatRoomTitle">채팅방을 선택하세요</div>
+              <div class="chat-online" id="chatOnline"></div>
+            </div>
+          </div>
+          <div class="chat-messages" id="chatMessages">
+            <div style="text-align:center;color:var(--t3);font-size:12px;margin:auto">채팅방을 선택하세요</div>
+          </div>
+          <div class="chat-input-area">
+            <textarea class="chat-input" id="chatInput" placeholder="메시지 입력... (Enter 전송, Shift+Enter 줄바꿈)" rows="1" onkeydown="handleChatKey(event)"></textarea>
+            <button class="chat-send" onclick="sendMsg()"><i class="ti ti-send" style="font-size:16px"></i></button>
+          </div>
         </div>
       </div>
-      <div class="ai-footer">
-        <div class="ai-quick">
-          <button class="ai-qbtn" onclick="quickAsk('칼로리 알려줘')">칼로리</button>
-          <button class="ai-qbtn" onclick="quickAsk('재료 대체 알려줘')">재료 대체</button>
-          <button class="ai-qbtn" onclick="quickAsk('2배 분량으로 바꿔줘')">2배 분량</button>
-          <button class="ai-qbtn" onclick="quickAsk('비건 버전 알려줘')">비건</button>
-        </div>
-        <div class="ai-row">
-          <textarea class="ai-input" id="aiInput" placeholder="질문하세요..." onkeydown="handleAiKey(event)" rows="1"></textarea>
-          <button class="ai-send" onclick="sendAi()"><i class="ti ti-send"></i></button>
-        </div>
-      </div>
     </div>
   </div>
 </div>
 
-<!-- MODALS -->
-<div class="overlay" id="catModal">
+<!-- POST MODAL -->
+<div class="overlay" id="postModal">
   <div class="modal">
-    <div class="modal-title"><i class="ti ti-tag"></i><span id="catModalTitle">카테고리 추가</span></div>
-    <div class="modal-sub">이름과 아이콘을 설정하세요.</div>
-    <label>이름</label>
-    <input type="text" id="catNameInput" placeholder="예: 한식, 건강식...">
-    <label>아이콘</label>
-    <div class="icon-picker" id="iconPicker"></div>
+    <div class="modal-title"><i class="ti ti-pencil"></i>새 글 작성</div>
+    <div class="modal-sub">게시판에 글을 공유하세요.</div>
+    <label>제목</label>
+    <input type="text" id="postTitle" placeholder="제목을 입력하세요...">
+    <label>내용</label>
+    <textarea id="postBody" placeholder="내용을 입력하세요..." style="min-height:120px"></textarea>
     <div class="modal-actions">
-      <button class="btn danger" id="catDelBtn" onclick="deleteCat()" style="margin-right:auto;display:none"><i class="ti ti-trash"></i>삭제</button>
-      <button class="btn" onclick="closeCatModal()">취소</button>
-      <button class="btn primary" onclick="saveCat()">저장</button>
-    </div>
-  </div>
-</div>
-
-<div class="overlay" id="addRecipeModal">
-  <div class="modal">
-    <div class="modal-title"><i class="ti ti-plus"></i>새 레시피</div>
-    <div class="modal-sub">기본 정보를 입력하세요.</div>
-    <label>레시피 이름</label>
-    <input type="text" id="newRName" placeholder="예: 된장찌개...">
-    <label>카테고리</label>
-    <select id="newRCat"></select>
-    <label>시간 & 분량</label>
-    <input type="text" id="newRMeta" placeholder="예: 30분 · 2인분">
-    <div class="modal-actions">
-      <button class="btn" onclick="closeModal('addRecipeModal')">취소</button>
-      <button class="btn primary" onclick="addRecipe()">추가</button>
-    </div>
-  </div>
-</div>
-
-<div class="overlay" id="shareModal">
-  <div class="modal" style="max-width:400px">
-    <div class="modal-title"><i class="ti ti-users"></i>공유 & 협업</div>
-    <div class="modal-sub">이 링크를 공유하면 누구나 바로 접속할 수 있습니다.</div>
-    <label>공유 링크</label>
-    <div style="display:flex;gap:7px;margin-bottom:14px">
-      <input type="text" id="shareLinkInput" readonly>
-      <button class="btn" onclick="copyLink()"><i class="ti ti-copy"></i></button>
-    </div>
-    <label>현재 접속 중인 멤버 <span id="memberCount" style="font-weight:400;color:var(--t3)"></span></label>
-    <div id="memberList"></div>
-    <div class="modal-actions">
-      <button class="btn" onclick="closeModal('shareModal')">닫기</button>
-    </div>
-  </div>
-</div>
-
-<div class="overlay" id="pdfModal">
-  <div class="modal">
-    <div class="modal-title"><i class="ti ti-file-type-pdf" style="color:var(--redt)"></i>PDF 내보내기</div>
-    <div class="modal-sub">선택된 레시피를 PDF로 인쇄하거나 저장하세요.</div>
-    <div class="modal-actions" style="margin-top:0">
-      <button class="btn" onclick="closeModal('pdfModal')">취소</button>
-      <button class="btn primary" onclick="exportPdf()"><i class="ti ti-file-type-pdf"></i>PDF 생성 & 인쇄</button>
-    </div>
-  </div>
-</div>
-
-<div class="overlay" id="photoModal">
-  <div class="modal">
-    <div class="modal-title"><i class="ti ti-photo"></i>사진 추가</div>
-    <div class="modal-sub">레시피 사진을 업로드하세요. <strong>최대 5MB / 장, JPG·PNG·WEBP</strong></div>
-    <div class="upload-zone" onclick="document.getElementById('photoInput').click()"
-      ondragover="event.preventDefault();this.classList.add('drag')"
-      ondragleave="this.classList.remove('drag')"
-      ondrop="handlePhotoDrop(event)">
-      <i class="ti ti-camera"></i>
-      <p><strong>사진 선택</strong> 또는 여기에 드래그</p>
-      <p style="margin-top:3px;font-size:11px;color:var(--t3)">최대 5MB · JPG, PNG, WEBP</p>
-    </div>
-    <input type="file" id="photoInput" accept="image/jpeg,image/png,image/webp" multiple style="display:none" onchange="uploadPhotos(this)">
-    <div id="photoProgress"></div>
-    <div class="modal-actions">
-      <button class="btn" onclick="closeModal('photoModal')">닫기</button>
+      <button class="btn" onclick="closeModal('postModal')">취소</button>
+      <button class="btn primary" onclick="submitPost()">게시하기</button>
     </div>
   </div>
 </div>
@@ -409,8 +355,7 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--text
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js";
-import { getDatabase, ref, set, get, push, update, remove, onValue, off, serverTimestamp, onDisconnect } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-database.js";
-import { getStorage, ref as sRef, uploadBytesResumable, getDownloadURL, deleteObject } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-storage.js";
+import { getDatabase, ref, set, get, push, update, remove, onValue, serverTimestamp, onDisconnect } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-database.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyCoy68_0vIna3tpiQWEcc39GFYmjZ5_YMM",
@@ -423,510 +368,334 @@ const firebaseConfig = {
 };
 const fbApp = initializeApp(firebaseConfig);
 const db = getDatabase(fbApp);
-const storage = getStorage(fbApp);
 
-const MAX_PHOTO_MB = 5;
-const ICONS = ['ti-soup','ti-fish','ti-salad','ti-ice-cream','ti-tools-kitchen-2','ti-bowl-chopsticks','ti-bread','ti-pizza','ti-meat','ti-egg','ti-apple','ti-coffee','ti-beer','ti-leaf','ti-flame','ti-star','ti-carrot','ti-lemon'];
-const AV_PALETTE = ['#dbeafe:#1d4ed8','#fce7f3:#9d174d','#dcfce7:#166534','#fef3c7:#92400e','#f3e8ff:#6b21a8','#ffedd5:#c2410c'];
+const AV_PAL = ['#dbeafe:#1d4ed8','#fce7f3:#9d174d','#dcfce7:#166534','#fef3c7:#92400e','#f3e8ff:#6b21a8','#ffedd5:#c2410c'];
+let myNick='', myId='';
+let activeNote=null, activeRoom='general';
 
-let myNick = '', myId = '';
-let categories = {}, recipes = {};
-let activeCat = 'all', activeId = null;
-let showFavOnly = false, editingCatId = null, selIcon = 'ti-soup';
-let searchQ = '';
+function avColor(str){let n=0;for(const c of(str||''))n+=c.charCodeAt(0);const[bg,tc]=AV_PAL[n%AV_PAL.length].split(':');return{bg,tc};}
+function timeAgo(ts){if(!ts)return'';const d=Date.now()-ts;if(d<60000)return'방금 전';if(d<3600000)return Math.floor(d/60000)+'분 전';if(d<86400000)return Math.floor(d/3600000)+'시간 전';return Math.floor(d/86400000)+'일 전';}
 
-function avColor(str) {
-  let n = 0; for (const c of (str||'')) n += c.charCodeAt(0);
-  const [bg,tc] = AV_PALETTE[n % AV_PALETTE.length].split(':');
-  return { bg, tc };
-}
-function timeAgo(ts) {
-  if (!ts) return '';
-  const d = Date.now() - ts;
-  if (d < 60000) return '방금 전';
-  if (d < 3600000) return Math.floor(d/60000)+'분 전';
-  if (d < 86400000) return Math.floor(d/3600000)+'시간 전';
-  return Math.floor(d/86400000)+'일 전';
-}
-
-// ── NICKNAME ENTER ──
+// ── ENTER ──
 window.enterApp = async () => {
   const nick = document.getElementById('nickInput').value.trim();
-  if (!nick) { document.getElementById('nickInput').focus(); return; }
-  myNick = nick;
-  myId = 'user_' + Math.random().toString(36).slice(2, 9);
-  const { bg, tc } = avColor(myId);
-  document.getElementById('myNick').textContent = nick;
-  const av = document.getElementById('myAv');
-  av.textContent = nick.charAt(0).toUpperCase();
-  av.style.background = bg; av.style.color = tc;
-
-  // Presence
-  const presRef = ref(db, `presence/${myId}`);
-  await set(presRef, { nick, id: myId, ts: Date.now() });
+  if(!nick){document.getElementById('nickInput').focus();return;}
+  myNick=nick; myId='u_'+Math.random().toString(36).slice(2,8);
+  sessionStorage.setItem('nick',nick); sessionStorage.setItem('uid',myId);
+  const{bg,tc}=avColor(myId);
+  document.getElementById('myNickLabel').textContent=nick;
+  document.getElementById('heroNick').textContent=nick;
+  const av=document.getElementById('myAv');
+  av.textContent=nick.charAt(0).toUpperCase(); av.style.background=bg; av.style.color=tc;
+  const presRef=ref(db,`presence/${myId}`);
+  await set(presRef,{nick,id:myId,ts:Date.now()});
   onDisconnect(presRef).remove();
-
-  document.getElementById('nickScreen').style.display = 'none';
-  document.getElementById('appScreen').style.display = 'flex';
+  document.getElementById('nickScreen').style.display='none';
+  document.getElementById('appScreen').style.display='flex';
   subscribeAll();
-  initDefaultCats();
+  loadNews();
+  initRooms();
 };
 
-document.getElementById('nickInput').addEventListener('keydown', e => { if(e.key==='Enter') window.enterApp(); });
+document.getElementById('nickInput').addEventListener('keydown',e=>{if(e.key==='Enter')window.enterApp();});
 
-async function initDefaultCats() {
-  const snap = await get(ref(db, 'categories'));
-  if (!snap.exists()) {
-    const defaults = [{name:'한식',icon:'ti-bowl-chopsticks'},{name:'양식',icon:'ti-tools-kitchen-2'},{name:'일식',icon:'ti-fish'},{name:'디저트',icon:'ti-ice-cream'}];
-    for (const d of defaults) {
-      const k = push(ref(db,'categories')).key;
-      await set(ref(db,`categories/${k}`), {...d, createdAt: serverTimestamp()});
-    }
-  }
+// restore session
+const sNick=sessionStorage.getItem('nick'), sUid=sessionStorage.getItem('uid');
+if(sNick&&sUid){
+  document.getElementById('nickInput').value=sNick;
 }
 
-// ── SUBSCRIBE ──
-function subscribeAll() {
-  onValue(ref(db,'categories'), snap => { categories = snap.val()||{}; renderSidebar(); renderRecipeList(); });
-  onValue(ref(db,'recipes'), snap => { recipes = snap.val()||{}; renderSidebar(); renderRecipeList(); if(activeId&&recipes[activeId]) renderDetail(activeId); updateFavBadge(); });
-  onValue(ref(db,'presence'), snap => {
-    const data = snap.val()||{};
-    document.getElementById('onlineCount').textContent = Object.keys(data).length+'명 접속';
+function subscribeAll(){
+  onValue(ref(db,'presence'),snap=>{
+    const d=snap.val()||{};
+    document.getElementById('onlineCount').textContent=Object.keys(d).length+'명';
   });
-  onValue(ref(db,'activity'), snap => {
-    const data = snap.val()||{};
-    const list = Object.values(data).sort((a,b)=>(b.ts||0)-(a.ts||0)).slice(0,8);
-    renderActivity(list);
+  onValue(ref(db,'activity'),snap=>{
+    const d=snap.val()||{};
+    const list=Object.values(d).sort((a,b)=>(b.ts||0)-(a.ts||0)).slice(0,10);
+    renderHomeActivity(list);
   });
+  onValue(ref(db,'notes'),snap=>{ renderNoteList(snap.val()||{}); });
+  onValue(ref(db,'board'),snap=>{ renderBoard(snap.val()||{}); });
 }
 
-// ── LOG ──
-async function log(action, recId) {
-  const k = push(ref(db,'activity')).key;
-  await set(ref(db,`activity/${k}`), { who: myNick, id: myId, action, recId: recId||null, ts: Date.now() });
-  const snap = await get(ref(db,'activity'));
-  if (snap.exists()) {
-    const entries = Object.entries(snap.val()).sort((a,b)=>(b[1].ts||0)-(a[1].ts||0));
-    if (entries.length > 50) for (const [k2] of entries.slice(50)) await remove(ref(db,`activity/${k2}`));
-  }
+async function log(action){
+  const k=push(ref(db,'activity')).key;
+  await set(ref(db,`activity/${k}`),{who:myNick,id:myId,action,ts:Date.now()});
 }
 
-// ── SIDEBAR ──
-function renderSidebar() {
-  const el = document.getElementById('catList');
-  el.innerHTML = '';
-  const allDiv = mkEl('div','sb-item'+(activeCat==='all'&&!showFavOnly?' active':''));
-  allDiv.innerHTML = `<i class="ti ti-layout-grid"></i>전체<span class="sb-badge">${Object.keys(recipes).length}</span>`;
-  allDiv.onclick = () => { showFavOnly=false; setCategory('all'); };
-  el.appendChild(allDiv);
-  Object.entries(categories).forEach(([id,cat]) => {
-    const cnt = Object.values(recipes).filter(r=>r.catId===id).length;
-    const d = mkEl('div','sb-item'+(activeCat===id&&!showFavOnly?' active':''));
-    d.innerHTML = `<i class="ti ${cat.icon||'ti-tag'}"></i><span>${cat.name}</span>
-      <button class="edit-cat-btn" onclick="openEditCat(event,'${id}')"><i class="ti ti-pencil" style="font-size:11px"></i></button>
-      <span class="sb-badge">${cnt}</span>`;
-    d.onclick = e => { if(e.target.closest('.edit-cat-btn')) return; showFavOnly=false; setCategory(id); };
-    el.appendChild(d);
-  });
-}
-
-function setCategory(id) {
-  activeCat = id;
-  const cat = id==='all'?{name:'전체'}:categories[id];
-  const cnt = id==='all'?Object.keys(recipes).length:Object.values(recipes).filter(r=>r.catId===id).length;
-  document.getElementById('colTitle').textContent = `${cat?.name||'전체'} · ${cnt}개`;
-  renderSidebar(); renderRecipeList();
-}
-
-window.toggleFavFilter = () => { showFavOnly=!showFavOnly; renderSidebar(); renderRecipeList(); };
-function updateFavBadge() { document.getElementById('favBadge').textContent = Object.values(recipes).filter(r=>r.favs&&r.favs[myId]).length; }
-
-// ── RECIPE LIST ──
-function renderRecipeList() {
-  const el = document.getElementById('recipeList'); el.innerHTML='';
-  let list = Object.entries(recipes).filter(([id,r])=>{
-    if (showFavOnly && !(r.favs&&r.favs[myId])) return false;
-    if (activeCat!=='all' && r.catId!==activeCat) return false;
-    if (searchQ && !(r.name||'').toLowerCase().includes(searchQ)) return false;
-    return true;
-  }).sort((a,b)=>(b[1].updatedAt||0)-(a[1].updatedAt||0));
-
-  if (!list.length) { el.innerHTML='<div class="empty-state"><i class="ti ti-notes-off"></i><p>레시피가 없습니다.</p></div>'; return; }
-  list.forEach(([id,r])=>{
-    const cat = categories[r.catId]||{name:'기타',icon:'ti-tag'};
-    const photos = r.photos?Object.values(r.photos):[];
-    const thumb = photos.length?`<img src="${photos[0].url}" alt="">`:`<i class="ti ${cat.icon}"></i>`;
-    const isFav = r.favs&&r.favs[myId];
-    const {bg,tc} = avColor(r.editedBy||'');
-    const d = mkEl('div','r-card'+(activeId===id?' active':''));
-    d.innerHTML = `<div class="r-thumb">${thumb}</div>
-      <div class="r-name">${r.name||'이름없음'} ${isFav?'<i class="ti ti-star-filled" style="color:#eab308;font-size:11px"></i>':''}</div>
-      <div class="r-meta"><span>${r.meta||''}</span><span class="r-cat-badge">${cat.name}</span></div>
-      <div class="r-edited"><div class="mini-av" style="background:${bg};color:${tc}">${(r.editedByNick||'?').charAt(0)}</div>${r.editedByNick||'알 수 없음'} · ${timeAgo(r.updatedAt)}</div>`;
-    d.onclick = () => selectRecipe(id);
-    el.appendChild(d);
-  });
-}
-
-window.filterRecipes = q => { searchQ=q.toLowerCase(); renderRecipeList(); };
-
-// ── DETAIL ──
-function selectRecipe(id) { activeId=id; renderRecipeList(); renderDetail(id); }
-
-function renderDetail(id) {
-  const r = recipes[id]; if(!r) return;
-  document.getElementById('noSelect').style.display='none';
-  document.getElementById('detailContent').style.display='flex';
-  document.getElementById('dTitle').value = r.name||'';
-  document.getElementById('dMeta').value = r.meta||'';
-  document.getElementById('dNote').value = r.note||'';
-  const isFav = r.favs&&r.favs[myId];
-  document.getElementById('favBtn').innerHTML = isFav?'<i class="ti ti-star-filled" style="color:#eab308"></i>해제':'<i class="ti ti-star"></i>즐겨찾기';
-
-  // Photos
-  const pr = document.getElementById('photoRow');
-  pr.innerHTML = `<div class="photo-add" onclick="openPhotoModal()"><i class="ti ti-plus"></i></div>`;
-  if (r.photos) Object.entries(r.photos).forEach(([pid,p])=>{
-    const d = mkEl('div','photo-thumb');
-    d.innerHTML = `<img src="${p.url}" alt="">`;
-    d.onclick = () => { if(confirm('이 사진을 삭제할까요?')) deletePhoto(id,pid,p.path); };
-    pr.insertBefore(d, pr.firstChild);
-  });
-
-  // Ingredients
-  const ig = document.getElementById('dIngGrid'); ig.innerHTML='';
-  (r.ingredients||[]).forEach((ing,i)=>{
-    const d = mkEl('div','ing-chip');
-    d.innerHTML = `<i class="ti ti-circle-dot" style="color:var(--t3);font-size:13px"></i>
-      <input value="${esc(ing)}" placeholder="재료명..." onchange="updIng(${i},this.value)">
-      <button onclick="rmIng(${i})"><i class="ti ti-x"></i></button>`;
-    ig.appendChild(d);
-  });
-
-  // Steps
-  const sd = document.getElementById('dSteps'); sd.innerHTML='';
-  (r.steps||[]).forEach((step,i)=>{
-    const d = mkEl('div','step-item');
-    d.innerHTML = `<div class="step-n">${i+1}</div>
-      <input class="step-input" value="${esc(step)}" placeholder="조리 과정..." onchange="updStep(${i},this.value)">
-      <button onclick="rmStep(${i})" style="border:none;background:none;cursor:pointer;color:var(--t3);padding:4px;display:flex;align-items:center"><i class="ti ti-x"></i></button>`;
-    sd.appendChild(d);
-  });
-
-  // Editing indicator
-  if (r.editingBy && r.editingBy!==myId) {
-    document.getElementById('editWho').textContent = r.editingByNick||'다른 사용자';
-    document.getElementById('editInd').style.display='flex';
-  } else document.getElementById('editInd').style.display='none';
-}
-
-// Editing presence signal
-let editingTimer = null;
-document.addEventListener('input', e => {
-  if (!activeId || !['dTitle','dMeta','dNote'].includes(e.target.id)) return;
-  update(ref(db,`recipes/${activeId}`), { editingBy: myId, editingByNick: myNick });
-  clearTimeout(editingTimer);
-  editingTimer = setTimeout(()=>update(ref(db,`recipes/${activeId}`),{editingBy:null,editingByNick:null}),4000);
-});
-
-// ── CRUD OPS ──
-window.addIng = async () => {
-  if(!activeId) return;
-  const ings = [...(recipes[activeId].ingredients||[]),''];
-  await update(ref(db,`recipes/${activeId}`),{ingredients:ings});
-};
-window.rmIng = async i => {
-  const ings=[...(recipes[activeId].ingredients||[])]; ings.splice(i,1);
-  await update(ref(db,`recipes/${activeId}`),{ingredients:ings});
-};
-window.updIng = async (i,v) => {
-  const ings=[...(recipes[activeId].ingredients||[])]; ings[i]=v;
-  await update(ref(db,`recipes/${activeId}`),{ingredients:ings});
-};
-window.addStep = async () => {
-  if(!activeId) return;
-  const steps=[...(recipes[activeId].steps||[]),''];
-  await update(ref(db,`recipes/${activeId}`),{steps});
-};
-window.rmStep = async i => {
-  const steps=[...(recipes[activeId].steps||[])]; steps.splice(i,1);
-  await update(ref(db,`recipes/${activeId}`),{steps});
-};
-window.updStep = async (i,v) => {
-  const steps=[...(recipes[activeId].steps||[])]; steps[i]=v;
-  await update(ref(db,`recipes/${activeId}`),{steps});
-};
-
-window.saveDetail = async () => {
-  if(!activeId) return;
-  const name = document.getElementById('dTitle').value.trim();
-  const meta = document.getElementById('dMeta').value.trim();
-  const note = document.getElementById('dNote').value;
-  if(!name){toast('레시피 이름을 입력하세요','warn');return;}
-  await update(ref(db,`recipes/${activeId}`),{name,meta,note,editedBy:myId,editedByNick:myNick,updatedAt:Date.now(),editingBy:null,editingByNick:null});
-  await log(`"${name}" 저장`, activeId);
-  toast('저장됨','ok');
-};
-
-window.deleteRecipe = async () => {
-  if(!activeId||!confirm('이 레시피를 삭제할까요?')) return;
-  const r=recipes[activeId];
-  if(r?.photos) for(const p of Object.values(r.photos)) try{await deleteObject(sRef(storage,p.path))}catch(e){}
-  await remove(ref(db,`recipes/${activeId}`));
-  await log(`"${r?.name}" 삭제`);
-  activeId=null;
-  document.getElementById('noSelect').style.display='flex';
-  document.getElementById('detailContent').style.display='none';
-  toast('삭제됨','ok');
-};
-
-window.toggleFav = async () => {
-  if(!activeId) return;
-  const r=recipes[activeId];
-  const isFav=r.favs&&r.favs[myId];
-  if(isFav) await remove(ref(db,`recipes/${activeId}/favs/${myId}`));
-  else await set(ref(db,`recipes/${activeId}/favs/${myId}`),true);
-};
-
-// ── CATEGORY ──
-window.openAddCat = () => {
-  editingCatId=null; selIcon='ti-soup';
-  document.getElementById('catModalTitle').textContent='카테고리 추가';
-  document.getElementById('catNameInput').value='';
-  document.getElementById('catDelBtn').style.display='none';
-  renderIconPicker();
-  document.getElementById('catModal').classList.add('open');
-  setTimeout(()=>document.getElementById('catNameInput').focus(),50);
-};
-window.openEditCat = (e,id) => {
-  e.stopPropagation();
-  const cat=categories[id]; if(!cat) return;
-  editingCatId=id; selIcon=cat.icon||'ti-tag';
-  document.getElementById('catModalTitle').textContent='카테고리 수정';
-  document.getElementById('catNameInput').value=cat.name;
-  document.getElementById('catDelBtn').style.display='flex';
-  renderIconPicker();
-  document.getElementById('catModal').classList.add('open');
-  setTimeout(()=>document.getElementById('catNameInput').focus(),50);
-};
-function renderIconPicker() {
-  document.getElementById('iconPicker').innerHTML=ICONS.map(ic=>`<div class="icon-opt${selIcon===ic?' sel':''}" onclick="pickIcon('${ic}')"><i class="ti ${ic}"></i></div>`).join('');
-}
-window.pickIcon = ic => { selIcon=ic; renderIconPicker(); };
-window.saveCat = async () => {
-  const name=document.getElementById('catNameInput').value.trim();
-  if(!name){document.getElementById('catNameInput').focus();return;}
-  if(editingCatId) { await update(ref(db,`categories/${editingCatId}`),{name,icon:selIcon}); toast('수정됨','ok'); }
-  else { const k=push(ref(db,'categories')).key; await set(ref(db,`categories/${k}`),{name,icon:selIcon,createdAt:serverTimestamp()}); toast('추가됨','ok'); }
-  closeCatModal();
-};
-window.deleteCat = async () => {
-  if(!editingCatId) return;
-  if(Object.values(recipes).some(r=>r.catId===editingCatId)){toast('이 카테고리에 레시피가 있어 삭제할 수 없습니다','warn');return;}
-  if(!confirm('삭제할까요?')) return;
-  await remove(ref(db,`categories/${editingCatId}`));
-  if(activeCat===editingCatId) setCategory('all');
-  closeCatModal(); toast('삭제됨','ok');
-};
-window.closeCatModal = () => document.getElementById('catModal').classList.remove('open');
-
-// ── ADD RECIPE ──
-window.openAddRecipe = () => {
-  const sel=document.getElementById('newRCat');
-  sel.innerHTML=Object.entries(categories).map(([id,c])=>`<option value="${id}">${c.name}</option>`).join('');
-  if(activeCat!=='all'){const o=sel.querySelector(`option[value="${activeCat}"]`);if(o)o.selected=true;}
-  document.getElementById('newRName').value='';
-  document.getElementById('newRMeta').value='';
-  document.getElementById('addRecipeModal').classList.add('open');
-  setTimeout(()=>document.getElementById('newRName').focus(),50);
-};
-window.addRecipe = async () => {
-  const name=document.getElementById('newRName').value.trim();
-  const catId=document.getElementById('newRCat').value;
-  const meta=document.getElementById('newRMeta').value.trim();
-  if(!name){document.getElementById('newRName').focus();return;}
-  const k=push(ref(db,'recipes')).key;
-  await set(ref(db,`recipes/${k}`),{name,catId,meta,ingredients:['재료를 입력하세요'],steps:['조리 과정을 입력하세요'],note:'',editedBy:myId,editedByNick:myNick,createdAt:serverTimestamp(),updatedAt:Date.now()});
-  await log(`"${name}" 추가`,k);
-  closeModal('addRecipeModal');
-  selectRecipe(k);
-  toast(`"${name}" 추가됨`,'ok');
-};
-
-// ── SHARE ──
-window.openShareModal = async () => {
-  document.getElementById('shareLinkInput').value=window.location.href;
-  const snap=await get(ref(db,'presence'));
-  const pres=snap.val()||{};
-  const members=Object.values(pres);
-  document.getElementById('memberCount').textContent=members.length+'명';
-  document.getElementById('memberList').innerHTML=members.map(m=>{
-    const {bg,tc}=avColor(m.id||'');
-    const isMe=m.id===myId;
-    return `<div class="member-row">
-      <div class="av" style="background:${bg};color:${tc};width:30px;height:30px;font-size:12px">${(m.nick||'?').charAt(0).toUpperCase()}</div>
-      <div class="member-info"><div class="member-name">${m.nick||'알 수 없음'} ${isMe?'<span style="font-size:10px;color:var(--t3)">(나)</span>':''}</div><div class="member-since">접속 중</div></div>
-      <span class="role-badge" style="background:var(--okbg);color:var(--okt)">🟢 온라인</span>
-    </div>`;
-  }).join('');
-  document.getElementById('shareModal').classList.add('open');
-};
-window.copyLink = () => { navigator.clipboard.writeText(window.location.href).then(()=>toast('링크 복사됨','ok')); };
-
-// ── PHOTOS ──
-window.openPhotoModal = () => {
-  if(!activeId){toast('레시피를 먼저 선택하세요','warn');return;}
-  document.getElementById('photoProgress').innerHTML='';
-  document.getElementById('photoModal').classList.add('open');
-};
-window.handlePhotoDrop = e => {
-  e.preventDefault();
-  e.currentTarget.classList.remove('drag');
-  uploadPhotos({files:e.dataTransfer.files});
-};
-window.uploadPhotos = async input => {
-  if(!activeId||!input.files.length) return;
-  const prog=document.getElementById('photoProgress');
-  for(const file of input.files){
-    if(!['image/jpeg','image/png','image/webp'].includes(file.type)){toast(`${file.name}: 지원하지 않는 형식`,'warn');continue;}
-    if(file.size>MAX_PHOTO_MB*1024*1024){toast(`${file.name}: 최대 ${MAX_PHOTO_MB}MB까지 업로드 가능합니다`,'warn');continue;}
-    const path=`photos/${activeId}/${Date.now()}_${file.name}`;
-    const storageRef=sRef(storage,path);
-    const task=uploadBytesResumable(storageRef,file);
-    const wrap=mkEl('div','');
-    wrap.style.marginTop='8px';
-    const label=document.createElement('div');
-    label.style.cssText='font-size:12px;color:var(--t2);margin-bottom:4px';
-    label.textContent=file.name;
-    const bar=mkEl('div','prog-bar');
-    const fill=mkEl('div','prog-fill');
-    fill.style.width='0%'; bar.appendChild(fill); wrap.appendChild(label); wrap.appendChild(bar);
-    prog.appendChild(wrap);
-    await new Promise((res,rej)=>{
-      task.on('state_changed',
-        s=>{fill.style.width=Math.round(s.bytesTransferred/s.totalBytes*100)+'%';},
-        rej,
-        async()=>{
-          const url=await getDownloadURL(task.snapshot.ref);
-          const k=push(ref(db,`recipes/${activeId}/photos`)).key;
-          await set(ref(db,`recipes/${activeId}/photos/${k}`),{url,path,name:file.name});
-          fill.style.background='var(--ok)';
-          label.textContent='✓ '+file.name;
-          res();
-        }
-      );
-    }).catch(()=>toast('업로드 실패: '+file.name,'warn'));
-  }
-  toast('업로드 완료','ok');
-};
-window.deletePhoto = async (recId,pid,path) => {
-  try{await deleteObject(sRef(storage,path))}catch(e){}
-  await remove(ref(db,`recipes/${recId}/photos/${pid}`));
-  toast('사진 삭제됨','ok');
-};
-
-// ── PDF ──
-window.openPdfModal = () => {
-  if(!activeId){toast('레시피를 먼저 선택하세요','warn');return;}
-  document.getElementById('pdfModal').classList.add('open');
-};
-window.exportPdf = () => {
-  if(!activeId) return;
-  const r=recipes[activeId];
-  const cat=categories[r.catId]||{name:'기타'};
-  const w=window.open('','_blank');
-  w.document.write(`<!DOCTYPE html><html lang="ko"><head><meta charset="UTF-8"><title>${r.name}</title>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600&display=swap" rel="stylesheet">
-    <style>body{font-family:'Noto Sans KR',sans-serif;max-width:620px;margin:40px auto;padding:24px;color:#18181b}
-    h1{font-size:26px;font-weight:600;margin-bottom:4px}
-    .meta{font-size:13px;color:#71717a;margin-bottom:26px;padding-bottom:16px;border-bottom:1px solid #e5e5e3}
-    h2{font-size:11px;font-weight:600;color:#a1a1aa;text-transform:uppercase;letter-spacing:.07em;margin:20px 0 10px;border-top:1px solid #e5e5e3;padding-top:14px}
-    .grid{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:4px}
-    .chip{background:#f4f4f3;padding:6px 10px;border-radius:6px;font-size:13px}
-    .step{display:flex;gap:10px;margin-bottom:9px;font-size:13px;line-height:1.6;align-items:flex-start}
-    .sn{width:20px;height:20px;border-radius:50%;background:#2563eb;color:#fff;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:600;flex-shrink:0;margin-top:2px}
-    .note{background:#f4f4f3;padding:12px;border-radius:8px;font-size:13px;line-height:1.6;margin-top:4px}
-    @media print{body{margin:0;padding:16px}}</style></head><body>
-    <h1>${r.name||''}</h1>
-    <div class="meta">${r.meta||''} · ${cat.name} · 레시피 북</div>
-    <h2>재료</h2>
-    <div class="grid">${(r.ingredients||[]).map(i=>`<div class="chip">${i}</div>`).join('')}</div>
-    <h2>조리 순서</h2>
-    ${(r.steps||[]).map((s,i)=>`<div class="step"><div class="sn">${i+1}</div><div>${s}</div></div>`).join('')}
-    ${r.note?`<h2>메모</h2><div class="note">${r.note}</div>`:''}
-    </body></html>`);
-  w.document.close();
-  setTimeout(()=>w.print(),600);
-  closeModal('pdfModal');
+// ── PAGES ──
+window.showPage = id => {
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-link').forEach(n=>n.classList.remove('active'));
+  document.getElementById('page-'+id).classList.add('active');
+  const nb=document.getElementById('nav-'+id);
+  if(nb)nb.classList.add('active');
+  if(id==='news')loadNews();
+  if(id==='chat')initChat();
 };
 
 // ── ACTIVITY ──
-function renderActivity(list) {
-  const el=document.getElementById('actFeed');
-  if(!list.length){el.innerHTML='<div style="font-size:11px;color:var(--t3)">아직 활동이 없습니다.</div>';return;}
+function renderHomeActivity(list){
+  const el=document.getElementById('homeActivity');
+  if(!list.length){el.innerHTML='<div style="text-align:center;color:var(--t3);font-size:12px;padding:20px">아직 활동이 없습니다.</div>';return;}
   el.innerHTML=list.map(a=>{
-    const {bg,tc}=avColor(a.id||'');
-    return `<div class="act-item"><div class="av" style="background:${bg};color:${tc};width:20px;height:20px;font-size:9px;border:none">${(a.who||'?').charAt(0)}</div>
-      <span><strong>${a.who}</strong>님이 ${a.action}</span><span class="act-time">${timeAgo(a.ts)}</span></div>`;
+    const{bg,tc}=avColor(a.id||'');
+    return`<div style="display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--border)">
+      <div class="av" style="background:${bg};color:${tc};font-size:11px;width:28px;height:28px">${(a.who||'?').charAt(0)}</div>
+      <span style="font-size:13px"><strong>${a.who}</strong>님이 ${a.action}</span>
+      <span style="margin-left:auto;font-size:11px;color:var(--t3)">${timeAgo(a.ts)}</span>
+    </div>`;
   }).join('');
 }
 
-// ── AI ──
-window.quickAsk = msg => { document.getElementById('aiInput').value=msg; sendAi(); };
-window.handleAiKey = e => { if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendAi();} };
-window.sendAi = async () => {
-  const input=document.getElementById('aiInput');
-  const msg=input.value.trim(); if(!msg) return;
-  input.value='';
-  addAiMsg(msg,'user');
-  showTyping();
-  const r=activeId&&recipes[activeId];
-  const context=r?`현재 레시피: ${r.name}, 재료: ${(r.ingredients||[]).join(', ')}, 메모: ${r.note||'없음'}.`:'레시피 미선택.';
-  try{
-    const res=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({model:'claude-sonnet-4-6',max_tokens:1000,messages:[{role:'user',content:`당신은 레시피 어시스턴트입니다. ${context} 사용자 질문: ${msg}. 한국어로 간결하게 답하세요.`}]})});
-    const data=await res.json();
-    removeTyping();
-    addAiMsg(data.content?.[0]?.text||'답변을 가져오지 못했어요.','ai');
-  }catch(e){removeTyping();addAiMsg('네트워크 오류가 발생했어요.','ai');}
+// ── NOTES ──
+let notes={};
+function renderNoteList(data){
+  notes=data;
+  const el=document.getElementById('noteList'); el.innerHTML='';
+  const list=Object.entries(data).sort((a,b)=>(b[1].updatedAt||0)-(a[1].updatedAt||0));
+  if(!list.length){el.innerHTML='<div style="padding:20px;text-align:center;font-size:12px;color:var(--t3)">노트가 없습니다</div>';return;}
+  list.forEach(([id,n])=>{
+    const d=document.createElement('div');
+    d.className='note-item'+(activeNote===id?' active':'');
+    d.innerHTML=`<div class="note-item-title">${n.title||'제목 없음'}</div>
+      <div class="note-item-preview">${(n.body||'').slice(0,40)||'내용 없음'}</div>
+      <div class="note-item-date">${timeAgo(n.updatedAt)}</div>`;
+    d.onclick=()=>openNote(id);
+    el.appendChild(d);
+  });
+}
+
+window.newNote=()=>{
+  activeNote=null;
+  document.getElementById('noteEditorEmpty').style.display='none';
+  document.getElementById('noteEditorContent').style.display='flex';
+  document.getElementById('noteTitleInput').value='';
+  document.getElementById('noteBodyInput').value='';
+  document.getElementById('deleteNoteBtn').style.display='none';
+  document.getElementById('noteStatus').textContent='';
+  document.getElementById('noteTitleInput').focus();
+  document.querySelectorAll('.note-item').forEach(n=>n.classList.remove('active'));
 };
-function addAiMsg(text,role){
-  const el=document.getElementById('aiMsgs');
-  const d=mkEl('div','ai-msg '+role);
-  d.innerHTML=`<div class="ai-role">${role==='user'?myNick||'나':'AI 어시스턴트'}</div><div class="ai-bubble">${text.replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>').replace(/\n/g,'<br>')}</div>`;
-  el.appendChild(d); el.scrollTop=el.scrollHeight;
+
+function openNote(id){
+  activeNote=id; const n=notes[id]; if(!n)return;
+  document.getElementById('noteEditorEmpty').style.display='none';
+  document.getElementById('noteEditorContent').style.display='flex';
+  document.getElementById('noteTitleInput').value=n.title||'';
+  document.getElementById('noteBodyInput').value=n.body||'';
+  document.getElementById('deleteNoteBtn').style.display='flex';
+  document.getElementById('noteStatus').textContent='';
+  document.querySelectorAll('.note-item').forEach(el=>el.classList.remove('active'));
+  document.querySelector(`.note-item:nth-child(${Object.keys(notes).indexOf(id)+1})`)?.classList.add('active');
 }
-function showTyping(){
-  const el=document.getElementById('aiMsgs');
-  const d=mkEl('div','ai-msg ai'); d.id='typing';
-  d.innerHTML='<div class="ai-role">AI 어시스턴트</div><div class="ai-bubble"><div class="typing"><span></span><span></span><span></span></div></div>';
-  el.appendChild(d); el.scrollTop=el.scrollHeight;
+
+window.saveNote=async()=>{
+  const title=document.getElementById('noteTitleInput').value.trim();
+  const body=document.getElementById('noteBodyInput').value;
+  const statusEl=document.getElementById('noteStatus');
+  statusEl.textContent='저장 중...'; statusEl.style.color='var(--t3)';
+  if(!title){document.getElementById('noteTitleInput').focus();statusEl.textContent='제목을 입력하세요';statusEl.style.color='var(--redt)';return;}
+  if(activeNote){
+    await update(ref(db,`notes/${activeNote}`),{title,body,updatedAt:Date.now(),editedBy:myNick});
+  } else {
+    const k=push(ref(db,'notes')).key;
+    await set(ref(db,`notes/${k}`),{title,body,createdBy:myNick,createdAt:serverTimestamp(),updatedAt:Date.now(),editedBy:myNick});
+    activeNote=k;
+  }
+  await log(`노트 "${title}" 저장`);
+  statusEl.textContent='✓ 저장됨'; statusEl.style.color='var(--okt)';
+  toast('노트 저장됨','ok');
+  setTimeout(()=>statusEl.textContent='',3000);
+};
+
+window.deleteNote=async()=>{
+  if(!activeNote||!confirm('이 노트를 삭제할까요?'))return;
+  await remove(ref(db,`notes/${activeNote}`));
+  activeNote=null;
+  document.getElementById('noteEditorEmpty').style.display='flex';
+  document.getElementById('noteEditorContent').style.display='none';
+  toast('삭제됨','ok');
+};
+
+// ── NEWS ──
+const NEWS_DATA=[
+  {tag:'트렌드',title:'2025 푸드 트렌드: 발효식품의 귀환',desc:'된장, 김치, 콤부차 등 발효식품이 건강 트렌드로 다시 주목받고 있습니다.',emoji:'🥗',date:'2025.06'},
+  {tag:'레시피',title:'여름 제철 식재료 활용법 10가지',desc:'여름에 가장 맛있는 식재료와 이를 활용한 간단한 요리법을 소개합니다.',emoji:'🌽',date:'2025.06'},
+  {tag:'건강',title:'지중해식 식단이 뇌 건강에 미치는 영향',desc:'최신 연구에 따르면 지중해식 식단이 인지 기능 저하를 늦춘다고 합니다.',emoji:'🫒',date:'2025.05'},
+  {tag:'문화',title:'세계 길거리 음식 TOP 10',desc:'전 세계 여행자들이 꼽은 가장 맛있는 길거리 음식을 알아봅니다.',emoji:'🌮',date:'2025.05'},
+  {tag:'기술',title:'AI가 만들어주는 맞춤형 레시피의 시대',desc:'인공지능이 냉장고 속 재료를 분석해 최적의 레시피를 추천해줍니다.',emoji:'🤖',date:'2025.05'},
+  {tag:'식품',title:'식물성 단백질 시장 급성장',desc:'비건 인구 증가와 함께 식물성 단백질 식품 시장이 빠르게 성장하고 있습니다.',emoji:'🌱',date:'2025.04'},
+];
+
+window.loadNews=()=>{
+  const el=document.getElementById('newsGrid'); el.innerHTML='';
+  NEWS_DATA.forEach(n=>{
+    const d=document.createElement('div');
+    d.className='news-card';
+    d.innerHTML=`<div class="news-thumb">${n.emoji}</div>
+      <div class="news-body">
+        <span class="news-tag">${n.tag}</span>
+        <div class="news-title">${n.title}</div>
+        <div class="news-desc">${n.desc}</div>
+        <div class="news-footer"><span>${n.date}</span><span>더 보기 →</span></div>
+      </div>`;
+    el.appendChild(d);
+  });
+};
+
+// ── BOARD ──
+let boardData={};
+function renderBoard(data){
+  boardData=data;
+  const el=document.getElementById('boardList'); el.innerHTML='';
+  const list=Object.entries(data).sort((a,b)=>(b[1].ts||0)-(a[1].ts||0));
+  if(!list.length){el.innerHTML=`<div class="empty-board"><i class="ti ti-message-off"></i><p>첫 글을 작성해보세요!</p></div>`;return;}
+  list.forEach(([id,p])=>{
+    const{bg,tc}=avColor(p.authorId||'');
+    const likes=p.likes?Object.keys(p.likes).length:0;
+    const iLike=p.likes&&p.likes[myId];
+    const comments=p.comments?Object.values(p.comments):[];
+    const d=document.createElement('div');
+    d.className='post-card'; d.id='post-'+id;
+    d.innerHTML=`<div class="post-header">
+        <div class="post-av" style="background:${bg};color:${tc}">${(p.author||'?').charAt(0)}</div>
+        <div class="post-meta"><div class="post-author">${p.author||'알 수 없음'}</div><div class="post-time">${timeAgo(p.ts)}</div></div>
+        ${p.authorId===myId?`<button class="btn danger" style="margin-left:auto;padding:4px 8px;font-size:11px" onclick="deletePost('${id}')"><i class="ti ti-trash"></i></button>`:''}
+      </div>
+      <div class="post-title">${p.title||''}</div>
+      <div class="post-body">${p.body||''}</div>
+      <div class="post-footer">
+        <span class="post-action${iLike?' liked':''}" onclick="toggleLike('${id}')"><i class="ti ti-heart${iLike?'-filled':''}"></i>${likes}</span>
+        <span class="post-action" onclick="toggleComments('${id}')"><i class="ti ti-message"></i>${comments.length} 댓글</span>
+      </div>
+      <div class="comment-area" id="comments-${id}">
+        ${comments.map(c=>`<div class="comment-item"><div class="av" style="background:${avColor(c.uid||'').bg};color:${avColor(c.uid||'').tc};width:22px;height:22px;font-size:9px;border:none">${(c.author||'?').charAt(0)}</div><div><strong style="font-size:11px">${c.author}</strong> <span style="color:var(--t2)">${c.text}</span></div></div>`).join('')}
+        <div class="comment-input-row">
+          <input class="comment-input" placeholder="댓글 입력..." id="ci-${id}">
+          <button class="btn primary" style="padding:6px 10px" onclick="submitComment('${id}')"><i class="ti ti-send"></i></button>
+        </div>
+      </div>`;
+    el.appendChild(d);
+  });
 }
-function removeTyping(){const t=document.getElementById('typing');if(t)t.remove();}
+
+window.openPostModal=()=>{ document.getElementById('postTitle').value=''; document.getElementById('postBody').value=''; document.getElementById('postModal').classList.add('open'); setTimeout(()=>document.getElementById('postTitle').focus(),50); };
+window.submitPost=async()=>{
+  const title=document.getElementById('postTitle').value.trim();
+  const body=document.getElementById('postBody').value.trim();
+  if(!title||!body){toast('제목과 내용을 입력하세요','warn');return;}
+  const k=push(ref(db,'board')).key;
+  await set(ref(db,`board/${k}`),{title,body,author:myNick,authorId:myId,ts:Date.now()});
+  await log(`게시판에 "${title}" 게시`);
+  closeModal('postModal'); toast('게시됨','ok');
+};
+window.deletePost=async id=>{
+  if(!confirm('삭제할까요?'))return;
+  await remove(ref(db,`board/${id}`)); toast('삭제됨','ok');
+};
+window.toggleLike=async id=>{
+  const p=boardData[id]; if(!p)return;
+  const liked=p.likes&&p.likes[myId];
+  if(liked) await remove(ref(db,`board/${id}/likes/${myId}`));
+  else await set(ref(db,`board/${id}/likes/${myId}`),true);
+};
+window.toggleComments=id=>{
+  const el=document.getElementById('comments-'+id);
+  el.style.display=el.style.display==='block'?'none':'block';
+};
+window.submitComment=async id=>{
+  const input=document.getElementById('ci-'+id);
+  const text=input.value.trim(); if(!text)return;
+  const k=push(ref(db,`board/${id}/comments`)).key;
+  await set(ref(db,`board/${id}/comments/${k}`),{text,author:myNick,uid:myId,ts:Date.now()});
+  input.value='';
+};
+
+// ── CHAT ──
+const ROOMS=[
+  {id:'general',name:'일반',icon:'💬',desc:'자유 대화'},
+  {id:'recipe',name:'레시피 토론',icon:'🍲',desc:'레시피 관련'},
+  {id:'tips',name:'요리 팁',icon:'💡',desc:'유용한 팁'},
+  {id:'notice',name:'공지',icon:'📢',desc:'공지사항'},
+];
+let chatListener=null;
+
+function initRooms(){
+  const el=document.getElementById('roomList'); el.innerHTML='';
+  ROOMS.forEach(r=>{
+    const d=document.createElement('div');
+    d.className='chat-room-item'+(activeRoom===r.id?' active':'');
+    d.innerHTML=`<div class="chat-room-icon" style="background:var(--s2)">${r.icon}</div>
+      <div><div class="chat-room-name">${r.name}</div><div class="chat-room-last">${r.desc}</div></div>`;
+    d.onclick=()=>selectRoom(r.id);
+    el.appendChild(d);
+  });
+}
+window.initChat=()=>{ initRooms(); if(activeRoom)selectRoom(activeRoom); };
+
+function selectRoom(id){
+  activeRoom=id;
+  const room=ROOMS.find(r=>r.id===id);
+  document.getElementById('chatRoomTitle').textContent=room?.name||id;
+  document.getElementById('chatRoomIcon').textContent=room?.icon||'💬';
+  document.getElementById('chatOnline').textContent='실시간 채팅';
+  document.querySelectorAll('.chat-room-item').forEach((el,i)=>el.classList.toggle('active',ROOMS[i].id===id));
+  const msgEl=document.getElementById('chatMessages'); msgEl.innerHTML='';
+  if(chatListener)chatListener();
+  const{unsubscribe}=subscribeChat(id);
+  chatListener=unsubscribe;
+}
+
+function subscribeChat(roomId){
+  const chatRef=ref(db,`chat/${roomId}`);
+  const unsub=onValue(chatRef,snap=>{
+    const data=snap.val()||{};
+    const msgs=Object.values(data).sort((a,b)=>(a.ts||0)-(b.ts||0));
+    const el=document.getElementById('chatMessages'); el.innerHTML='';
+    if(!msgs.length){el.innerHTML='<div style="text-align:center;color:var(--t3);font-size:12px;margin:auto">첫 메시지를 보내보세요!</div>';return;}
+    msgs.forEach(m=>{
+      const mine=m.uid===myId;
+      const{bg,tc}=avColor(m.uid||'');
+      const d=document.createElement('div');
+      d.className='msg'+(mine?' mine':'');
+      d.innerHTML=`<div class="msg-av" style="background:${bg};color:${tc}">${(m.who||'?').charAt(0)}</div>
+        <div class="msg-content">
+          ${!mine?`<div class="msg-name">${m.who}</div>`:''}
+          <div class="msg-bubble">${m.text}</div>
+          <div class="msg-time">${timeAgo(m.ts)}</div>
+        </div>`;
+      el.appendChild(d);
+    });
+    el.scrollTop=el.scrollHeight;
+  });
+  return{unsubscribe:()=>{}};
+}
+
+window.sendMsg=async()=>{
+  const input=document.getElementById('chatInput');
+  const text=input.value.trim(); if(!text||!activeRoom)return;
+  input.value='';
+  const k=push(ref(db,`chat/${activeRoom}`)).key;
+  await set(ref(db,`chat/${activeRoom}/${k}`),{text,who:myNick,uid:myId,ts:Date.now()});
+};
+window.handleChatKey=e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();window.sendMsg();}};
 
 // ── UTILS ──
-function mkEl(tag,cls){const e=document.createElement(tag);if(cls)e.className=cls;return e;}
-function esc(str){return (str||'').replace(/"/g,'&quot;').replace(/</g,'&lt;');}
-window.closeModal = id => document.getElementById(id).classList.remove('open');
-
+window.closeModal=id=>document.getElementById(id).classList.remove('open');
 let toastT=null;
 function toast(msg,type){
   const t=document.getElementById('toast');
-  const ic=document.getElementById('toastIcon');
   document.getElementById('toastMsg').textContent=msg;
-  ic.className=type==='ok'?'ti ti-check':type==='warn'?'ti ti-alert-triangle':'ti ti-info-circle';
-  t.style.background=type==='warn'?'#92400e':type==='red'?'#b91c1c':'#18181b';
+  document.getElementById('toastIcon').className=type==='ok'?'ti ti-check':'ti ti-alert-triangle';
+  t.style.background=type==='warn'?'#92400e':'#18181b';
   t.classList.add('show');
   if(toastT)clearTimeout(toastT);
   toastT=setTimeout(()=>t.classList.remove('show'),2500);
 }
 window.toast=toast;
-
-// keyboard shortcuts
-document.addEventListener('keydown',e=>{
-  if((e.metaKey||e.ctrlKey)&&e.key==='s'){e.preventDefault();if(activeId)window.saveDetail();}
-  if(e.key==='Escape'){document.querySelectorAll('.overlay.open').forEach(o=>o.classList.remove('open'));}
-});
+document.addEventListener('keydown',e=>{if(e.key==='Escape')document.querySelectorAll('.overlay.open').forEach(o=>o.classList.remove('open'));});
 </script>
 </body>
 </html>
