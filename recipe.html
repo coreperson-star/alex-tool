@@ -789,9 +789,9 @@ function aiSend(msg,msgsEl,inputEl){
   if(!msg)return;inputEl.value='';
   var r=activeId&&recipes[activeId];var ctx=r?'현재 레시피: '+r.name+', 재료: '+(r.ingredients||[]).join(', ')+'.':'레시피 미선택.';
   addAiMsg(msg,'user',msgsEl);showTyping(msgsEl);
-  fetch('/.netlify/functions/ai',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({message:msg,context:ctx})})
+  fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json','x-api-key':'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','anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},body:JSON.stringify({model:'claude-haiku-4-5-20251001',max_tokens:1000,messages:[{role:'user',content:'당신은 레시피 어시스턴트입니다. '+ctx+' 질문: '+msg+'. 한국어로 간결하게 답하세요.'}]})})
     .then(function(res){return res.json();})
-    .then(function(data){removeTyping(msgsEl);addAiMsg(data.text||'답변을 가져오지 못했어요.','ai',msgsEl);})
+    .then(function(data){removeTyping(msgsEl);addAiMsg((data.content&&data.content[0]&&data.content[0].text)||'답변을 가져오지 못했어요.','ai',msgsEl);})
     .catch(function(){removeTyping(msgsEl);addAiMsg('네트워크 오류가 발생했어요.','ai',msgsEl);});
 }
 function addAiMsg(text,role,el){var d=document.createElement('div');d.className=role==='user'?'ai-user':'ai-bot';d.innerHTML='<div class="ai-msg-role">'+(role==='user'?(myNick||'나'):'AI 어시스턴트')+'</div><div class="ai-bubble">'+text.replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>').replace(/\n/g,'<br>')+'</div>';el.appendChild(d);el.scrollTop=el.scrollHeight;}
