@@ -88,6 +88,7 @@ body{
 .topbar-right{margin-left:auto;display:flex;align-items:center;gap:6px;flex-shrink:0}
 .online-pill{display:flex;align-items:center;gap:5px;padding:4px 8px;background:var(--okbg);border-radius:99px;font-size:11px;color:var(--okt);font-weight:500;white-space:nowrap}
 .pulse{width:6px;height:6px;border-radius:50%;background:var(--ok);animation:pulse 2s infinite;flex-shrink:0}
+@keyframes spin{to{transform:rotate(360deg)}}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
 .av{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;flex-shrink:0}
 
@@ -576,21 +577,38 @@ function saveNote(){
 function deleteNote(){if(!activeNote||!confirm('삭제할까요?'))return;db.ref('notes/'+activeNote).remove();activeNote=null;document.getElementById('noteEditorEmpty').style.display='flex';document.getElementById('noteEditorContent').style.display='none';toast('삭제됨','ok');}
 
 // NEWS
-var NEWS_DATA=[
-  {tag:'트렌드',title:'2025 푸드 트렌드: 발효식품의 귀환',desc:'된장, 김치, 콤부차 등 발효식품이 건강 트렌드로 주목받고 있습니다.',emoji:'🥗',date:'2025.06'},
-  {tag:'레시피',title:'여름 제철 식재료 활용법 10가지',desc:'여름에 가장 맛있는 식재료와 간단한 요리법을 소개합니다.',emoji:'🌽',date:'2025.06'},
-  {tag:'건강',title:'지중해식 식단과 뇌 건강',desc:'지중해식 식단이 인지 기능 저하를 늦춘다는 연구 결과입니다.',emoji:'🫒',date:'2025.05'},
-  {tag:'문화',title:'세계 길거리 음식 TOP 10',desc:'전 세계 여행자들이 꼽은 가장 맛있는 길거리 음식입니다.',emoji:'🌮',date:'2025.05'},
-  {tag:'기술',title:'AI가 만드는 맞춤형 레시피',desc:'인공지능이 냉장고 재료를 분석해 최적의 레시피를 추천합니다.',emoji:'🤖',date:'2025.05'},
-  {tag:'식품',title:'식물성 단백질 시장 급성장',desc:'비건 인구 증가와 함께 식물성 단백질 시장이 성장 중입니다.',emoji:'🌱',date:'2025.04'},
-];
+var NEWS_EMOJIS=['🍳','🥗','🍜','🥘','🍱','🥩','🍕','🥙','🫕','🍣','🧆','🥗'];
+var NEWS_TAGS=['요리','레시피','식품','트렌드','건강','문화'];
 function loadNews(){
-  var el=document.getElementById('newsGrid');el.innerHTML='';
-  NEWS_DATA.forEach(function(n){
-    var d=document.createElement('div');d.className='news-card';
-    d.innerHTML='<div class="news-thumb">'+n.emoji+'</div><div class="news-body"><span class="news-tag">'+n.tag+'</span><div class="news-title">'+n.title+'</div><div class="news-desc">'+n.desc+'</div></div>';
-    el.appendChild(d);
-  });
+  var el=document.getElementById('newsGrid');
+  el.innerHTML='<div style="text-align:center;padding:30px;color:var(--t3);font-size:13px"><i class="ti ti-loader" style="font-size:24px;display:block;margin-bottom:8px;animation:spin 1s linear infinite"></i>뉴스 불러오는 중...</div>';
+  var apiKey='ff405bd823ef460a8413f91d023ead81';
+  var url='https://newsapi.org/v2/everything?q=food+recipe+cooking&language=en&sortBy=publishedAt&pageSize=12&apiKey='+apiKey;
+  fetch(url)
+    .then(function(r){return r.json();})
+    .then(function(data){
+      el.innerHTML='';
+      var articles=data.articles||[];
+      if(!articles.length){
+        el.innerHTML='<div style="text-align:center;padding:30px;color:var(--t3);font-size:13px">뉴스를 불러오지 못했습니다.<br><button class="btn" onclick="loadNews()" style="margin-top:10px"><i class="ti ti-refresh"></i> 다시 시도</button></div>';
+        return;
+      }
+      articles.forEach(function(a,i){
+        if(!a.title||a.title==='[Removed]')return;
+        var d=document.createElement('div');d.className='news-card';
+        var date=a.publishedAt?new Date(a.publishedAt).toLocaleDateString('ko-KR',{month:'long',day:'numeric'}):'';
+        var tag=NEWS_TAGS[i%NEWS_TAGS.length];
+        var emoji=NEWS_EMOJIS[i%NEWS_EMOJIS.length];
+        var thumb=a.urlToImage?'<img src="'+a.urlToImage+'" style="width:100%;height:100%;object-fit:cover" onerror="this.parentNode.innerHTML=\''+emoji+'\'">':emoji;
+        d.innerHTML='<div class="news-thumb">'+thumb+'</div><div class="news-body"><span class="news-tag">'+tag+'</span><div class="news-title">'+a.title+'</div><div class="news-desc">'+(a.description||'')+'</div><div style="font-size:11px;color:var(--t3);margin-top:6px;display:flex;justify-content:space-between"><span>'+(a.source&&a.source.name?a.source.name:'')+'</span><span>'+date+'</span></div></div>';
+        d.style.cursor='pointer';
+        d.onclick=function(){if(a.url)window.open(a.url,'_blank');};
+        el.appendChild(d);
+      });
+    })
+    .catch(function(){
+      el.innerHTML='<div style="text-align:center;padding:30px;color:var(--t3);font-size:13px">뉴스를 불러오지 못했습니다.<br><button class="btn" onclick="loadNews()" style="margin-top:10px"><i class="ti ti-refresh"></i> 다시 시도</button></div>';
+    });
 }
 
 // BOARD
